@@ -1,9 +1,16 @@
-const Redis = require('@upstash/redis');
+const REDIS_URL = process.env.KV_REST_API_URL;
+const REDIS_TOKEN = process.env.KV_REST_API_TOKEN;
 
-const redis = new Redis({
-  url: process.env.KV_REST_API_URL,
-  token: process.env.KV_REST_API_TOKEN,
-});
+async function redisSet(key, value, ttl) {
+  const url = ttl
+    ? `${REDIS_URL}/set/${key}?ex=${ttl}`
+    : `${REDIS_URL}/set/${key}`;
+  await fetch(url, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${REDIS_TOKEN}` },
+    body: value,
+  });
+}
 
 const ONE_OFF_PRODUCTS = ['kv4Q3'];
 const TIER_CONFIG = {
@@ -19,13 +26,13 @@ module.exports = async (req, res) => {
   const { product_id, license_key, custom } = req.body;
 
   if (ONE_OFF_PRODUCTS.includes(product_id) && custom) {
-    await redis.set(`session:${custom}`, JSON.stringify({ status: 'paid' }), { ex: 3600 });
+    await redisSet(`session:${custom}`, JSON.stringify({ status: 'paid' }), 3600);
     return res.status(200).json({ success: true });
   }
 
   if (license_key && TIER_CONFIG[product_id]) {
     const config = TIER_CONFIG[product_id];
-    await redis.set(`license:${license_key}`, JSON.stringify({
+    await redisSet(`license:${license_key}`, JSON.stringify({
       remaining: config.max,
       max: config.max,
       seasonal: config.seasonal,
