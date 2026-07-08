@@ -1,4 +1,9 @@
-const { kv } = require('@vercel/kv');
+const Redis = require('@upstash/redis');
+
+const redis = new Redis({
+  url: process.env.KV_REST_API_URL,
+  token: process.env.KV_REST_API_TOKEN,
+});
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -8,13 +13,15 @@ module.exports = async (req, res) => {
   const { licenseKey } = req.body;
   if (!licenseKey) return res.status(400).json({ error: 'Missing licenseKey' });
 
-  const data = await kv.get(`license:${licenseKey}`);
+  const data = await redis.get(`license:${licenseKey}`);
   if (!data) return res.status(404).json({ valid: false, error: 'Invalid license key' });
+
+  const parsed = typeof data === 'string' ? JSON.parse(data) : data;
 
   return res.status(200).json({
     valid: true,
-    remaining: data.remaining,
-    max: data.max,
-    seasonal: data.seasonal || false,
+    remaining: parsed.remaining,
+    max: parsed.max,
+    seasonal: parsed.seasonal || false,
   });
 };
