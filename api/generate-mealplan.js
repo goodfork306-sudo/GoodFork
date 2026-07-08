@@ -1,10 +1,23 @@
 const OpenAI = require('openai');
-const Redis = require('@upstash/redis');
 
-const redis = new Redis({
-  url: process.env.KV_REST_API_URL,
-  token: process.env.KV_REST_API_TOKEN,
-});
+const REDIS_URL = process.env.KV_REST_API_URL;
+const REDIS_TOKEN = process.env.KV_REST_API_TOKEN;
+
+async function redisGet(key) {
+  const res = await fetch(`${REDIS_URL}/get/${key}`, {
+    headers: { Authorization: `Bearer ${REDIS_TOKEN}` },
+  });
+  const data = await res.json();
+  return data.result;
+}
+
+async function redisSet(key, value) {
+  await fetch(`${REDIS_URL}/set/${key}`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${REDIS_TOKEN}` },
+    body: value,
+  });
+}
 
 const SYSTEM_PROMPT = `You are a professional paediatric and family nutritionist with deep knowledge of global cuisines. Generate a practical, healthy 7-day meal plan (Monday through Sunday) for a person living in {country} (if "Other" was selected and a custom country was typed, use that custom country instead). Age group: {ageGroup}. Dietary filters: {dietaryFilters}. Any additional restrictions: {extraRestrictions}. The plan is for {people} people.
 
@@ -81,12 +94,12 @@ module.exports = async (req, res) => {
   const peopleCount = people || 1;
 
   if (!licenseKey) return res.status(401).json({ error: 'License key required' });
-  const licenseData = await redis.get(`license:${licenseKey}`);
+  const licenseData = await redisGet(`license:${licenseKey}`);
   if (!licenseData) return res.status(403).json({ error: 'Invalid license key' });
   const parsed = typeof licenseData === 'string' ? JSON.parse(licenseData) : licenseData;
   if (parsed.remaining <= 0) return res.status(403).json({ error: 'Usage limit reached' });
 
-  await redis.set(`license:${licenseKey}`, JSON.stringify({
+  await redisSet(`license:${licenseKey}`, JSON.stringify({
     remaining: parsed.remaining - 1,
     max: parsed.max,
     seasonal: parsed.seasonal,
