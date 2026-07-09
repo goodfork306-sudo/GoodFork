@@ -2,6 +2,7 @@
   "name": "goodfork-backend",
   "version": "1.0.0",
   "dependencies": {
-    "openai": "^4.20.0"
+    "openai": "^4.20.0",
+    "bcryptjs": "^2.4.3"
   }
 }
