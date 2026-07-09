@@ -124,7 +124,11 @@ module.exports = async (req, res) => {
   finalPrompt = `${finalPrompt}\n${varietyInstructions}\n${seasonalInstructions}`;
 
   try {
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+        const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ error: 'API key not configured on server' });
+    }
+    const openai = new OpenAI({ apiKey });
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
