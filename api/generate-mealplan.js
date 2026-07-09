@@ -135,7 +135,13 @@ module.exports = async (req, res) => {
       max_tokens: 3000,
     });
     return res.status(200).json({ mealPlan: completion.choices[0].message.content });
-  } catch (error) {
-    return res.status(500).json({ error: 'Generation failed' });
+    } catch (error) {
+    console.error('OpenAI error:', error);
+    return res.status(500).json({ 
+      error: 'Generation failed', 
+      message: error.message,
+      type: error.type,
+      code: error.code 
+    });
   }
 };
