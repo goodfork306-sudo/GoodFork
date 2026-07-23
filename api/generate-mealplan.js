@@ -75,7 +75,7 @@ Pantry: qty item
 Spices: qty item
 Allergens: list
 
-Multiply quantities by {people}. Include every ingredient.`;
+Multiply quantities by {people}. Include every ingredient.
 
 ⚠️ Disclaimer: This meal plan is for informational purposes only and does not replace professional medical or dietary advice.`;
 
