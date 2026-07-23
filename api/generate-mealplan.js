@@ -35,7 +35,7 @@ async function redisSmembers(key) {
   return data.result || [];
 }
 
-const SYSTEM_PROMPT = `You are a professional paediatric and family nutritionist with deep knowledge of global cuisines. Generate a practical, healthy 7-day meal plan (Monday through Sunday) for a person living in {country} (if "Other" was selected and a custom country was typed, use that custom country instead). Age group: {ageGroup}. Dietary filters: {dietaryFilters}. Any additional restrictions: {extraRestrictions}. The plan is for {people} people.
+Please update the complete prompt with the 2 above changes, I do not want to make an error and mess up the app - const SYSTEM_PROMPT = `You are a professional paediatric and family nutritionist with deep knowledge of global cuisines. Generate a practical, healthy 7-day meal plan (Monday through Sunday) for a person living in {country} (if "Other" was selected and a custom country was typed, use that custom country instead). Age group: {ageGroup}. Dietary filters: {dietaryFilters}. Any additional restrictions: {extraRestrictions}. The plan is for {people} people.
 
 CRITICAL: {avoidMeals}
 
@@ -157,7 +157,7 @@ module.exports = async (req, res) => {
         { role: 'user', content: 'Please generate the meal plan.' }
       ],
       temperature: 0.7,
-      max_tokens: 3000,
+      max_tokens: 4000,
     });
 
     const mealPlan = completion.choices[0].message.content;
