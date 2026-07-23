@@ -35,62 +35,47 @@ async function redisSmembers(key) {
   return data.result || [];
 }
 
-const SYSTEM_PROMPT = `You are a professional paediatric and family nutritionist with deep knowledge of global cuisines. Generate a practical, healthy 7-day meal plan (Monday through Sunday) for a person living in {country} (if "Other" was selected and a custom country was typed, use that custom country instead). Age group: {ageGroup}. Dietary filters: {dietaryFilters}. Any additional restrictions: {extraRestrictions}. The plan is for {people} people.
+const SYSTEM_PROMPT = `Generate a FULL 7-day meal plan (Mon-Sun) for {people} {ageGroup} in {country}. Diets: {dietaryFilters}. Extra: {extraRestrictions}. {avoidMeals}
 
-CRITICAL: {avoidMeals}
+Rules: Respect all diets. Use local {country} ingredients. Age-appropriate portions. No processed foods.
 
-Requirements:
-- Each day must include: Breakfast, Morning Snack, Lunch, Afternoon Snack, Dinner.
-- All meals must strictly respect every dietary restriction. If {dietaryFilters} includes "Vegetarian", exclude all meat, poultry, fish. If "Vegan", exclude all animal products. If "Halal", exclude pork and alcohol. If "Dairy-free", exclude all dairy. If "Gluten-free", exclude wheat, barley, rye. If "Nut-free", exclude peanuts and tree nuts; coconut is safe. Honour all selected filters simultaneously.
-- Follow any custom restriction from "{extraRestrictions}". If empty, ignore.
-- Use ingredients commonly available in the selected country.
-- Reflect the culinary traditions of that country.
-- Adjust portions and textures for {ageGroup}.
-- No ultra-processed foods.
-- Meals should be realistic for a busy family. No ultra-processed foods.
+Per meal format (keep each meal to 4-5 lines total):
+Name: Short enticing phrase (TIME | DIFFICULTY | CAL kcal | P: Xg | C: Xg | F: Xg)
+Ingredients: qty item, qty item
+Steps: 1. Step 2. Step 3. Step
+Healthy: One sentence. Allergens: X
 
-For EVERY meal:
-1. Write one short, enticing phrase (5-10 words max) describing the dish. Keep it brief.
-2. On the SAME LINE, append: "(⏱️ X min | 🧑‍🍳 Easy/Medium/Hard | 🔥 X kcal | P: Xg | C: Xg | F: Xg)".
-3. Then list Ingredients, Instructions, Nutrition, Why it's healthy, Allergens.
+CRITICAL: You MUST output all 7 days (Mon-Sun) plus shopping list. Do not stop early.
 
-Format exactly:
-=== Monday ===
-Breakfast: [description] (metadata)
-Ingredients: [list with quantities]
-Instructions: 1. [Step] 2. [Step] ...
-Nutrition: 🔥 X kcal | P: Xg | C: Xg | F: Xg
-Why it's healthy: [sentence]
-Allergens: [list or None]
-... (all meals)
-Daily total: ~ XXXX kcal
+=== Mon ===
+Breakfast: Name (X min | Easy | X kcal | P: Xg | C: Xg | F: Xg)
+Ingredients: qty item
+Steps: 1. Step 2. Step
+Healthy: Sentence. Allergens: X
 
-=== Tuesday ===
-You MUST output all 7 days (Monday through Sunday) plus the complete shopping list. Do not stop early. Do not truncate. If you run out of space, shorten the meal descriptions but ALWAYS include all 7 days and the full shopping list.
+Morning Snack: ... (same format)
+Lunch: ...
+Afternoon Snack: ...
+Dinner: ...
+Daily total: ~X kcal
+
+=== Tue === [...all 5 meals...]
+=== Wed === [...all 5 meals...]
+=== Thu === [...all 5 meals...]
+=== Fri === [...all 5 meals...]
+=== Sat === [...all 5 meals...]
+=== Sun === [...all 5 meals...]
 
 === Shopping List ===
+Produce: qty item, qty item
+Proteins: qty item
+Dairy: qty item
+Grains: qty item
+Pantry: qty item
+Spices: qty item
+Allergens: list
 
-🥦 Fresh Produce
-☐ quantity ingredient
-
-🍗 Proteins
-☐ quantity ingredient
-
-🥛 Dairy and Alternatives
-☐ quantity ingredient
-
-🍞 Grains and Breads
-☐ quantity ingredient
-
-🧂 Pantry and Condiments
-☐ quantity ingredient
-
-🌿 Spices
-☐ quantity ingredient
-
-Allergen Summary: list all allergens across the week
-
-Multiply all shopping list quantities by {people}.
+Multiply quantities by {people}. Include every ingredient.`;
 
 ⚠️ Disclaimer: This meal plan is for informational purposes only and does not replace professional medical or dietary advice.`;
 
@@ -164,7 +149,7 @@ module.exports = async (req, res) => {
         { role: 'user', content: 'Please generate the meal plan.' }
       ],
       temperature: 0.7,
-      max_tokens: 5000,
+      max_tokens: 8000,
     });
 
     const mealPlan = completion.choices[0].message.content;
