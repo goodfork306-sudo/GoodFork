@@ -44,70 +44,43 @@ Rules:
 - Adjust textures and portions for {ageGroup}
 - No ultra-processed foods
 
-For each meal use this compact format:
-Name: Short enticing phrase (X min | Difficulty | X kcal | P: Xg | C: Xg | F: Xg)
+For each meal use this format:
+Name: [emoji] Short enticing phrase (X min | Difficulty | X kcal | P: Xg | C: Xg | F: Xg)
 Ingredients: quantity ingredient, quantity ingredient
 Steps: 1. Step 2. Step 3. Step
 Healthy: One sentence. Allergens: X
 
+Use these emojis for meals: Breakfast 🌅, Morning Snack 🍌, Lunch 🥗, Afternoon Snack 🥕, Dinner 🍽️
+
 CRITICAL: Output all 7 days plus shopping list. Do not stop early.
 
 === Monday ===
-Breakfast: Name (X min | Easy | X kcal | P: Xg | C: Xg | F: Xg)
+🌅 Breakfast: Name (X min | Easy | X kcal | P: Xg | C: Xg | F: Xg)
 Ingredients: qty item
 Steps: 1. Step 2. Step
 Healthy: Sentence. Allergens: X
 
-Morning Snack: Name (X min | Easy | X kcal | P: Xg | C: Xg | F: Xg)
+🍌 Morning Snack: Name (X min | Easy | X kcal | P: Xg | C: Xg | F: Xg)
 Ingredients: qty item
 Steps: 1. Step
 Healthy: Sentence. Allergens: X
 
-Lunch: Name (X min | Easy | X kcal | P: Xg | C: Xg | F: Xg)
+🥗 Lunch: Name (X min | Easy | X kcal | P: Xg | C: Xg | F: Xg)
 Ingredients: qty item, qty item
 Steps: 1. Step 2. Step 3. Step
 Healthy: Sentence. Allergens: X
 
-Afternoon Snack: Name (X min | Easy | X kcal | P: Xg | C: Xg | F: Xg)
+🥕 Afternoon Snack: Name (X min | Easy | X kcal | P: Xg | C: Xg | F: Xg)
 Ingredients: qty item
 Steps: 1. Step
 Healthy: Sentence. Allergens: X
 
-Dinner: Name (X min | Medium | X kcal | P: Xg | C: Xg | F: Xg)
+🍽️ Dinner: Name (X min | Medium | X kcal | P: Xg | C: Xg | F: Xg)
 Ingredients: qty item, qty item
 Steps: 1. Step 2. Step 3. Step 4. Step
 Healthy: Sentence. Allergens: X
 
 Daily total: ~X kcal
-
-=== Tuesday ===
-[5 meals in same format]
-
-=== Wednesday ===
-[5 meals in same format]
-
-=== Thursday ===
-[5 meals in same format]
-
-=== Friday ===
-[5 meals in same format]
-
-=== Saturday ===
-[5 meals in same format]
-
-=== Sunday ===
-[5 meals in same format]
-
-=== Shopping List ===
-Fresh Produce: qty item, qty item
-Proteins: qty item
-Dairy: qty item
-Grains: qty item
-Pantry: qty item
-Spices: qty item
-Allergens: list
-
-Multiply shopping quantities by {people}. Include every ingredient with exact quantities.
 
 ⚠️ Disclaimer: This meal plan is for informational purposes only and does not replace professional medical or dietary advice.`;
 
