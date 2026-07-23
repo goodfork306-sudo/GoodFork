@@ -41,22 +41,18 @@ CRITICAL: {avoidMeals}
 
 Requirements:
 - Each day must include: Breakfast, Morning Snack, Lunch, Afternoon Snack, Dinner.
-- All meals must strictly respect every dietary restriction. If {dietaryFilters} includes "🥕 Vegetarian", exclude all meat, poultry, fish. If "🌱 Vegan", exclude all animal products (meat, dairy, eggs, honey). If "🕌 Halal", exclude pork and alcohol; use lamb, chicken, beef – user will source halal. If "🥛 Dairy-free", exclude all dairy and hidden dairy (casein, whey). If "🌾 Gluten-free", exclude wheat, barley, rye; use rice, maize, certified GF oats, buckwheat, quinoa. If "🥜 Nut-free", exclude peanuts and tree nuts; coconut is safe unless stated otherwise. If multiple filters are selected, honour all simultaneously.
-- Additionally, follow exactly any custom restriction from "{extraRestrictions}". If empty, ignore.
-- Use ingredients that are commonly available in the selected country (local markets, standard supermarkets).
-- The meals must reflect the culinary traditions of that country.
-- Adjust portion sizes and food textures precisely to {ageGroup}:
-   * Infant (6-12 months): Only soft purees, mashed foods. No salt/sugar. No honey. No cow's milk as drink.
-   * Toddler (1-3 years): Bite-sized, soft pieces. Avoid choking hazards.
-   * Preschooler (4-6 years): Family-friendly meals, cut round foods lengthwise.
-   * Child (7-12 years): Regular family meals, balanced.
-   * Teen (13-17 years): Nutrient-dense, calcium- and iron-rich.
-   * Adult (18-59 years): Balanced whole foods, lean protein, fibre.
-   * Senior (60+ years): Easy-to-chew, nutrient-dense, lower sodium.
+- All meals must strictly respect every dietary restriction. If {dietaryFilters} includes "Vegetarian", exclude all meat, poultry, fish. If "Vegan", exclude all animal products. If "Halal", exclude pork and alcohol. If "Dairy-free", exclude all dairy. If "Gluten-free", exclude wheat, barley, rye. If "Nut-free", exclude peanuts and tree nuts; coconut is safe. Honour all selected filters simultaneously.
+- Follow any custom restriction from "{extraRestrictions}". If empty, ignore.
+- Use ingredients commonly available in the selected country.
+- Reflect the culinary traditions of that country.
+- Adjust portions and textures for {ageGroup}.
+- No ultra-processed foods.
 - Meals should be realistic for a busy family. No ultra-processed foods.
 
-For EVERY meal line, append this metadata on the SAME line: "(⏱️ X min | 🧑‍🍳 Easy/Medium/Hard | 🔥 X kcal | P: Xg | C: Xg | F: Xg)".
-After each day's dinner, add "Why it's healthy:" note.
+For EVERY meal:
+1. Write one short, enticing phrase (5-10 words max) describing the dish. Keep it brief.
+2. On the SAME LINE, append: "(⏱️ X min | 🧑‍🍳 Easy/Medium/Hard | 🔥 X kcal | P: Xg | C: Xg | F: Xg)".
+3. Then list Ingredients, Instructions, Nutrition, Why it's healthy, Allergens.
 
 Format exactly:
 === Monday ===
@@ -70,7 +66,7 @@ Allergens: [list or None]
 Daily total: ~ XXXX kcal
 
 === Tuesday ===
-...continue through Sunday. ALL 7 DAYS REQUIRED.
+You MUST output all 7 days (Monday through Sunday) plus the complete shopping list. Do not stop early. Do not truncate. If you run out of space, shorten the meal descriptions but ALWAYS include all 7 days and the full shopping list.
 
 === Shopping List ===
 
@@ -168,7 +164,7 @@ module.exports = async (req, res) => {
         { role: 'user', content: 'Please generate the meal plan.' }
       ],
       temperature: 0.7,
-      max_tokens: 4000,
+      max_tokens: 5000,
     });
 
     const mealPlan = completion.choices[0].message.content;
