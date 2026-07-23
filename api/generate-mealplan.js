@@ -69,22 +69,33 @@ Allergens: [list or None]
 ... (all meals)
 Daily total: ~ XXXX kcal
 
+=== Tuesday ===
+...continue through Sunday. ALL 7 DAYS REQUIRED.
+
 === Shopping List ===
+
 🥦 Fresh Produce
 ☐ quantity ingredient
+
 🍗 Proteins
 ☐ quantity ingredient
-🥛 Dairy & Alternatives
+
+🥛 Dairy and Alternatives
 ☐ quantity ingredient
-🍞 Grains & Breads
+
+🍞 Grains and Breads
 ☐ quantity ingredient
-🧂 Pantry & Condiments
+
+🧂 Pantry and Condiments
 ☐ quantity ingredient
+
 🌿 Spices
 ☐ quantity ingredient
-Allergen Summary: [list]
+
+Allergen Summary: list all allergens across the week
 
 Multiply all shopping list quantities by {people}.
+
 ⚠️ Disclaimer: This meal plan is for informational purposes only and does not replace professional medical or dietary advice.`;
 
 function getSeason(country, month) {
