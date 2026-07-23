@@ -35,39 +35,71 @@ async function redisSmembers(key) {
   return data.result || [];
 }
 
-const SYSTEM_PROMPT = `Generate a FULL 7-day meal plan (Mon-Sun) for {people} {ageGroup} in {country}. Diets: {dietaryFilters}. Extra: {extraRestrictions}. {avoidMeals}
+const SYSTEM_PROMPT = `Generate a complete 7-day meal plan (Monday through Sunday) for a {ageGroup} living in {country}. Dietary filters: {dietaryFilters}. Extra restrictions: {extraRestrictions}. For {people} people. {avoidMeals}
 
-Rules: Respect all diets. Use local {country} ingredients. Age-appropriate portions. No processed foods.
+Rules:
+- 5 meals per day: Breakfast, Morning Snack, Lunch, Afternoon Snack, Dinner
+- Strictly respect all dietary filters and custom restrictions
+- Use local ingredients and traditional dishes from {country}
+- Adjust textures and portions for {ageGroup}
+- No ultra-processed foods
 
-Per meal format (keep each meal to 4-5 lines total):
-Name: Short enticing phrase (TIME | DIFFICULTY | CAL kcal | P: Xg | C: Xg | F: Xg)
-Ingredients: qty item, qty item
+For each meal use this compact format:
+Name: Short enticing phrase (X min | Difficulty | X kcal | P: Xg | C: Xg | F: Xg)
+Ingredients: quantity ingredient, quantity ingredient
 Steps: 1. Step 2. Step 3. Step
 Healthy: One sentence. Allergens: X
 
-CRITICAL: You MUST output all 7 days (Mon-Sun) plus shopping list. Do not stop early.
+CRITICAL: Output all 7 days plus shopping list. Do not stop early.
 
-=== Mon ===
+=== Monday ===
 Breakfast: Name (X min | Easy | X kcal | P: Xg | C: Xg | F: Xg)
 Ingredients: qty item
 Steps: 1. Step 2. Step
 Healthy: Sentence. Allergens: X
 
-Morning Snack: ... (same format)
-Lunch: ...
-Afternoon Snack: ...
-Dinner: ...
+Morning Snack: Name (X min | Easy | X kcal | P: Xg | C: Xg | F: Xg)
+Ingredients: qty item
+Steps: 1. Step
+Healthy: Sentence. Allergens: X
+
+Lunch: Name (X min | Easy | X kcal | P: Xg | C: Xg | F: Xg)
+Ingredients: qty item, qty item
+Steps: 1. Step 2. Step 3. Step
+Healthy: Sentence. Allergens: X
+
+Afternoon Snack: Name (X min | Easy | X kcal | P: Xg | C: Xg | F: Xg)
+Ingredients: qty item
+Steps: 1. Step
+Healthy: Sentence. Allergens: X
+
+Dinner: Name (X min | Medium | X kcal | P: Xg | C: Xg | F: Xg)
+Ingredients: qty item, qty item
+Steps: 1. Step 2. Step 3. Step 4. Step
+Healthy: Sentence. Allergens: X
+
 Daily total: ~X kcal
 
-=== Tue === [...all 5 meals...]
-=== Wed === [...all 5 meals...]
-=== Thu === [...all 5 meals...]
-=== Fri === [...all 5 meals...]
-=== Sat === [...all 5 meals...]
-=== Sun === [...all 5 meals...]
+=== Tuesday ===
+[5 meals in same format]
+
+=== Wednesday ===
+[5 meals in same format]
+
+=== Thursday ===
+[5 meals in same format]
+
+=== Friday ===
+[5 meals in same format]
+
+=== Saturday ===
+[5 meals in same format]
+
+=== Sunday ===
+[5 meals in same format]
 
 === Shopping List ===
-Produce: qty item, qty item
+Fresh Produce: qty item, qty item
 Proteins: qty item
 Dairy: qty item
 Grains: qty item
@@ -75,7 +107,7 @@ Pantry: qty item
 Spices: qty item
 Allergens: list
 
-Multiply quantities by {people}. Include every ingredient.
+Multiply shopping quantities by {people}. Include every ingredient with exact quantities.
 
 ⚠️ Disclaimer: This meal plan is for informational purposes only and does not replace professional medical or dietary advice.`;
 
@@ -110,24 +142,19 @@ module.exports = async (req, res) => {
   const account = typeof accountData === 'string' ? JSON.parse(accountData) : accountData;
   if (account.remaining <= 0) return res.status(403).json({ error: 'Usage limit reached' });
 
-  // Deduct usage
   account.remaining -= 1;
   await redisSet(`account:${email}`, JSON.stringify(account));
 
-  // Get previously generated meal names to avoid
   const previousMeals = await redisSmembers(`history:${email}`);
   const avoidMeals = previousMeals.length > 0
-    ? `You must NOT use any of these meals that were already generated for this customer: ${previousMeals.join(', ')}. Create entirely new, different meals.`
+    ? `Do NOT use these meals: ${previousMeals.join(', ')}. Create completely new meals.`
     : '';
 
-  // Variety and seasonal instructions
   const randomWeek = Math.floor(Math.random() * 52) + 1;
-  const varietyInstructions = `This is a unique plan. Random week: ${randomWeek}.`;
-
   let seasonalInstructions = '';
   if (account.seasonal) {
     const season = getSeason(country, new Date().getMonth() + 1);
-    seasonalInstructions = `Strictly seasonal for ${season} in ${country}.`;
+    seasonalInstructions = `Use seasonal ingredients for ${season} in ${country}.`;
   }
 
   let finalPrompt = SYSTEM_PROMPT
@@ -138,7 +165,7 @@ module.exports = async (req, res) => {
     .replace(/{people}/g, peopleCount)
     .replace(/{avoidMeals}/g, avoidMeals);
 
-  finalPrompt = `${finalPrompt}\n${varietyInstructions}\n${seasonalInstructions}`;
+  finalPrompt = `${finalPrompt}\nRandom week: ${randomWeek}. ${seasonalInstructions}`;
 
   try {
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -146,7 +173,7 @@ module.exports = async (req, res) => {
       model: 'gpt-4o-mini',
       messages: [
         { role: 'system', content: finalPrompt },
-        { role: 'user', content: 'Please generate the meal plan.' }
+        { role: 'user', content: 'Generate the full 7-day meal plan now.' }
       ],
       temperature: 0.7,
       max_tokens: 8000,
@@ -154,12 +181,11 @@ module.exports = async (req, res) => {
 
     const mealPlan = completion.choices[0].message.content;
 
-    // Extract meal names and store in history
     const mealNames = [];
     const lines = mealPlan.split('\n');
     for (const line of lines) {
-      if (line.startsWith('Breakfast:') || line.startsWith('Morning Snack:') || 
-          line.startsWith('Lunch:') || line.startsWith('Afternoon Snack:') || 
+      if (line.startsWith('Breakfast:') || line.startsWith('Morning Snack:') ||
+          line.startsWith('Lunch:') || line.startsWith('Afternoon Snack:') ||
           line.startsWith('Dinner:')) {
         const name = line.split(':')[1]?.split('(')[0]?.trim();
         if (name) mealNames.push(name);
@@ -176,9 +202,8 @@ module.exports = async (req, res) => {
       max: account.max,
     });
   } catch (error) {
-    // Refund the deducted use if generation fails
     account.remaining += 1;
     await redisSet(`account:${email}`, JSON.stringify(account));
-    return res.status(500).json({ error: 'Generation failed. Your plan count has been restored.' });
+    return res.status(500).json({ error: 'Generation failed. Plan count restored.' });
   }
 };
