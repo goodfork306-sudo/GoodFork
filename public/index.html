@@ -768,10 +768,17 @@
         if (shopIndex > -1) {
         mealPlanText = fullText.substring(0, shopIndex).trim();
         shoppingText = fullText.substring(shopIndex).trim();
-        } else {
-        mealPlanText = fullText;
-        shoppingText = data.shoppingList || data.shopping_list || '';
-}
+         } else {
+          const fullText = data.mealPlan || '';
+          const shopMarker = '### Shopping List';
+          const shopIndex = fullText.indexOf(shopMarker);
+          if (shopIndex > -1) {
+            mealPlanText = fullText.substring(0, shopIndex).trim();
+            shoppingText = fullText.substring(shopIndex).trim();
+          } else {
+            mealPlanText = fullText;
+            shoppingText = '';
+          }
           allergenText = data.allergens || '';
           if (!session.demo && data.remaining !== undefined) {
             session.remaining = data.remaining;
@@ -787,7 +794,6 @@
         }
         render();
       }
-    }
 
     function cancelGenerate() {
       if (genAbortController) genAbortController.abort();
