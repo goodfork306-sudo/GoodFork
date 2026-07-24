@@ -750,8 +750,17 @@
           generating = false;
           render();
         } else {
-          mealPlanText = data.mealPlan || '';
-          shoppingText = data.shoppingList || data.shopping_list || '';
+         const fullText = data.mealPlan || '';
+        // Split shopping list from meal plan
+        const shopMarker = '=== Shopping List ===';
+        const shopIndex = fullText.indexOf(shopMarker);
+        if (shopIndex > -1) {
+        mealPlanText = fullText.substring(0, shopIndex).trim();
+        shoppingText = fullText.substring(shopIndex).trim();
+        } else {
+        mealPlanText = fullText;
+        shoppingText = data.shoppingList || data.shopping_list || '';
+}
           allergenText = data.allergens || '';
           if (!session.demo && data.remaining !== undefined) {
             session.remaining = data.remaining;
