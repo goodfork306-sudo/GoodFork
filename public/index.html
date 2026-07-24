@@ -150,56 +150,73 @@
       return r;
     }
 
-          function parseMeals(content) {
+              function parseMeals(content) {
       const meals = [];
       const lines = content.split('\n');
       let cur = null;
+      let section = '';
       
       for (const line of lines) {
         let t = line.trim();
         if (!t) continue;
-        // Remove leading bullet points and markdown
-        t = t.replace(/^[•\-\*]\s*/, '');
-        // Remove bold markers for matching
-        const c = t.replace(/\*\*/g, '');
+        // Remove leading bullet markers and asterisks for section detection
+        const cleanForSection = t.replace(/^[•\-\*]\s*/, '').replace(/\*\*/g, '');
         
         // Detect meal heading with emoji
         if (/^(🌅|🍌|🥗|🥕|🍽️|�)\s/i.test(t)) {
           if (cur && (cur.ingredients.length || cur.steps.length)) meals.push(cur);
-          const mm = c.match(/\(([^)]+)\)\s*$/);
-          const meta = mm ? mm[1] : '';
-          let name = c.replace(/^[🌅🍌🥗🥕🍽️�]\s*/,'').trim();
-          name = name.replace(/\s*\([^)]+\)\s*$/,'').trim();
-          name = name.replace(/\*\*/g,'');
+          const metaMatch = t.match(/\(([^)]+)\)\s*$/);
+          const meta = metaMatch ? metaMatch[1] : '';
+          let name = t.replace(/^[🌅🍌🥗🥕🍽️�]\s*/, '').trim();
+          name = name.replace(/\s*\([^)]+\)\s*$/, '').trim();
+          name = name.replace(/\*\*/g, '');
           cur = { name, meta, ingredients: [], steps: [], healthy: '', allergens: '' };
+          section = '';
         } else if (cur) {
-          if (/\*\*ingredients:?\*\*/i.test(t) || /^ingredients?:/i.test(c)) {
-            const rest = c.replace(/^ingredients?:\s*/i,'').trim();
-            if (rest) cur.ingredients.push(rest);
-          } else if (/\*\*steps?:?\*\*/i.test(t) || /^steps?:/i.test(c)) {
-            // Steps header, skip
-          } else if (/\*\*(why it.?s healthy|healthy):?\*\*/i.test(t) || /^(why it.?s healthy|healthy):/i.test(c)) {
-            cur.healthy = c.replace(/^(why it.?s healthy|healthy):\s*/i,'').trim();
-            const am = t.match(/\*\*allergens?:?\*\*\s*(.+)$/i) || c.match(/allergens?:\s*(.+)$/i);
-            if (am) cur.allergens = am[1].trim();
-          } else if (/\*\*allergens?:?\*\*/i.test(t) || /^allergens?:/i.test(c)) {
-            cur.allergens = c.replace(/^allergens?:\s*/i,'').trim();
-          } else if (/^daily total:/i.test(c) || /^\*\*daily total:?\*\*/i.test(t)) {
-            // End of day
-          } else if (cur.steps.length === 0 && cur.healthy === '') {
-            // Still collecting ingredients
-            cur.ingredients.push(c);
-          } else if (cur.steps.length > 0 && cur.healthy === '' && !/^[•\-\*]/.test(line.trim())) {
-            cur.steps.push(c);
-          } else if (/^[•\-\*]\s*\d+\./.test(line.trim()) || /^\d+\./.test(c)) {
-            cur.steps.push(c.replace(/^[•\-\*]\s*/,''));
+          // Check for section headers (with or without asterisk/bullet prefix)
+          if (/^[•\-\*]?\s*\*\*?ingredients?:?\*\*?\s*:/i.test(t) || /^ingredients?:/i.test(cleanForSection)) {
+            section = 'ingredients';
+            const rest = cleanForSection.replace(/^ingredients?:\s*/i, '').trim();
+            if (rest && !rest.startsWith('*')) cur.ingredients.push(rest);
+          } else if (/^[•\-\*]?\s*\*\*?steps?:?\*\*?\s*:/i.test(t) || /^steps?:/i.test(cleanForSection)) {
+            section = 'steps';
+            const rest = cleanForSection.replace(/^steps?:\s*/i, '').trim();
+            if (rest && !rest.startsWith('*')) cur.steps.push(rest);
+          } else if (/^[•\-\*]?\s*\*\*?(why it.?s healthy|healthy):?\*\*?\s*:/i.test(t) || /^(why it.?s healthy|healthy):/i.test(cleanForSection)) {
+            section = 'healthy';
+            let htext = cleanForSection.replace(/^(why it.?s healthy|healthy):\s*/i, '').trim();
+            // Check for allergens on same line
+            const allerMatch = htext.match(/allergens?:\s*(.+)$/i);
+            if (allerMatch) {
+              cur.allergens = allerMatch[1].trim();
+              htext = htext.replace(/\s*allergens?:\s*.+$/i, '').trim();
+            }
+            cur.healthy = htext;
+          } else if (/^[•\-\*]?\s*\*\*?allergens?:?\*\*?\s*:/i.test(t) || /^allergens?:/i.test(cleanForSection)) {
+            section = 'allergens';
+            cur.allergens = cleanForSection.replace(/^allergens?:\s*/i, '').trim();
+          } else if (/^daily total:/i.test(cleanForSection) || /^\*\*daily total:?\*\*/i.test(t)) {
+            section = '';
+          } else if (/^--/i.test(cleanForSection)) {
+            section = '';
+          } else {
+            // Content lines
+            const cleaned = cleanForSection;
+            if (section === 'ingredients' && cleaned && !cleaned.startsWith('*')) {
+              cur.ingredients.push(cleaned);
+            } else if (section === 'steps' && cleaned) {
+              cur.steps.push(cleaned);
+            } else if (section === 'healthy' && cleaned && !cur.healthy) {
+              cur.healthy = cleaned;
+            }
           }
         }
       }
       if (cur && (cur.ingredients.length || cur.steps.length)) meals.push(cur);
       return meals;
     }
-       function parseShoppingList(text) {
+    
+           function parseShoppingList(text) {
       const lines = text.split('\n');
       const cats = [];
       let cur = null;
@@ -207,53 +224,62 @@
       for (const line of lines) {
         let t = line.trim();
         if (!t) continue;
-        // Remove leading bullet points, dashes, markdown headers
-        t = t.replace(/^[•\-\*]\s*/, '').replace(/^###\s*/, '').replace(/^####\s*/, '');
-        const c = t.replace(/\*\*/g, '').replace(/:$/,'').trim();
+        // Remove leading bullet markers, dashes, asterisks
+        t = t.replace(/^[•\-\*]\s*/, '');
+        const c = t.replace(/\*\*/g, '').trim();
         
-        // Category heading detection
-        if (/^(\*\*)?(fresh produce|produce|proteins?|dairy|grains|pantry|spices|condiments|breads|other|miscellaneous)(:?\*\*)?/i.test(c)) {
-          const name = c.replace(/\*\*/g, '').replace(/:$/,'').trim();
-          const em = {'fresh produce':'🥦','produce':'🥦','protein':'🍗','proteins':'🍗','dairy':'🥛','grains':'🍞','pantry':'🧂','spices':'🌿','condiments':'🧂','breads':'🍞','other':'📦','miscellaneous':'📦'};
+        // Skip separators and disclaimer
+        if (/^--/.test(c) || /^⚠️/.test(c) || /^disclaimer/i.test(c)) continue;
+        
+        // Category heading: contains a category keyword followed by a colon or items
+        const catKeywords = ['produce', 'protein', 'dairy', 'grain', 'pantry', 'spice', 'condiment', 'bread', 'nuts', 'other', 'miscellaneous'];
+        const isCat = catKeywords.some(k => c.toLowerCase().includes(k)) && 
+                      (c.includes(':') || /^[A-Z][a-z]+(\s+&?\s+[A-Z][a-z]+)*$/.test(c));
+        
+        if (isCat && !cur) {
+          const name = c.replace(/:$/,'').trim();
+          const em = {'fresh produce':'🥦','produce':'🥦','protein':'🍗','proteins':'🍗','dairy':'🥛','grains':'🍞','pantry':'🧂','spices':'🌿','condiments':'🧂','breads':'🍞','nuts':'🥜','other':'📦','miscellaneous':'📦'};
           const k = Object.keys(em).find(x => name.toLowerCase().includes(x));
           cur = { name, emoji: k ? em[k] : '📦', items: [] };
           cats.push(cur);
-        } else if (cur && c) {
-          // Remove leading dashes, asterisks
-          const item = c.replace(/^[-*•]\s*/, '').trim();
-          if (item && !item.startsWith('---') && !item.startsWith('===') && !item.startsWith('⚠️')) {
-            cur.items.push(item);
+          // Check if there are items on the same line after colon
+          const afterColon = c.replace(/^[^:]+:\s*/, '').trim();
+          if (afterColon && afterColon.length > 0) {
+            afterColon.split(',').forEach(item => {
+              const clean = item.trim();
+              if (clean) cur.items.push(clean);
+            });
+            cur = null; // Reset for next category
           }
+        } else if (cur && c) {
+          cur.items.push(c);
         }
       }
       return cats;
     }
     
-        function renderMealContent(content) {
+           function renderMealContent(content) {
       const meals = parseMeals(content);
       if (!meals.length) return '<p style="color:#888;font-size:14px;">No meal data available</p>';
       return meals.map(m => {
         const mp = m.meta ? m.meta.split('|').map(s=>s.trim()) : [];
         let mb = '';
         if (mp.length>=4) mb = `<div class="macro-badges"><span class="macro-badge macro-time">⏱️ ${mp[0]}</span><span class="macro-badge macro-diff">🧑‍🍳 ${mp[1]}</span><span class="macro-badge macro-cal">🔥 ${mp[2]}</span><span class="macro-badge macro-macros">${mp.slice(3).join(' | ')}</span></div>`;
-        const ing = m.ingredients.length ? `<p style="font-weight:700;color:#2D6A4F;margin-top:8px;">📝 Ingredients</p><ul class="ingredient-list">${m.ingredients.map(i=>`<li>☐ ${i.replace(/\*\*/g,'')}</li>`).join('')}</ul>` : '';
-        const stp = m.steps.length ? `<p style="font-weight:700;color:#2D6A4F;margin-top:8px;">👨‍🍳 Steps</p><ol class="step-list">${m.steps.map(s=>`<li>${s.replace(/^\d+\.\s|-\s/,'').replace(/\*\*/g,'')}</li>`).join('')}</ol>` : '';
-        const hl = m.healthy ? `<div class="healthy-note">💚 <strong>Why it's healthy:</strong> ${m.healthy.replace(/\*\*/g,'')}</div>` : '';
-        const al = m.allergens ? `<div class="allergen-box ${m.allergens.toLowerCase().includes('none')?'allergen-safe':'allergen-warn'}">${m.allergens.toLowerCase().includes('none')?'✅ No common allergens':`⚠️ <strong>Allergens:</strong> ${m.allergens.replace(/\*\*/g,'')}`}</div>` : '';
+        const ing = m.ingredients.length ? `<p style="font-weight:700;color:#2D6A4F;margin-top:8px;">📝 Ingredients</p><ul class="ingredient-list">${m.ingredients.map(i=>`<li>• ${i}</li>`).join('')}</ul>` : '';
+        const stp = m.steps.length ? `<p style="font-weight:700;color:#2D6A4F;margin-top:8px;">👨‍🍳 Steps</p><ol class="step-list">${m.steps.map((s,i)=>`<li>${s.replace(/^\d+\.\s|-\s/,'')}</li>`).join('')}</ol>` : '';
+        const hl = m.healthy ? `<div class="healthy-note">💚 <strong>Why it's healthy:</strong> ${m.healthy}</div>` : '';
+        const al = m.allergens ? `<div class="allergen-box ${m.allergens.toLowerCase().includes('none')?'allergen-safe':'allergen-warn'}">${m.allergens.toLowerCase().includes('none')?'✅ No common allergens':`⚠️ <strong>Allergens:</strong> ${m.allergens}`}</div>` : '';
         return `<div class="meal-block"><div class="meal-name">${m.name}</div>${mb}${ing}${stp}${hl}${al}</div>`;
       }).join('');
     }
 
-        function renderShoppingList(text) {
+           function renderShoppingList(text) {
       const cats = parseShoppingList(text);
       if (!cats.length) {
         return text.split('\n').filter(l => {
           const t = l.trim().replace(/^[•\-\*]\s*/, '');
-          return t && !t.startsWith('---') && !t.startsWith('===') && !t.startsWith('⚠️') && !t.startsWith('###');
-        }).map(l => {
-          const clean = l.trim().replace(/^[•\-\*]\s*/,'').replace(/\*\*/g,'');
-          return `<div class="shop-item"><span class="shop-checkbox">☐</span> ${clean}</div>`;
-        }).join('');
+          return t && !t.startsWith('---') && !t.startsWith('===') && !t.startsWith('⚠️');
+        }).map(l => `<div class="shop-item"><span class="shop-checkbox">☐</span> ${l.trim().replace(/^[•\-\*]\s*/,'').replace(/\*\*/g,'')}</div>`).join('');
       }
       return cats.map(c => 
         `<div class="shop-category">${c.emoji} ${c.name}</div>
