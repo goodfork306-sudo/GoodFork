@@ -760,18 +760,32 @@
           setGenError(data.error || 'Something went wrong. Please try again.');
           generating = false;
           render();
-        } else {
-         const fullText = data.mealPlan || '';
-        // Split shopping list from meal plan
-        const shopMarker = '=== Shopping List ===';
-        const shopIndex = fullText.indexOf(shopMarker);
-        if (shopIndex > -1) {
-        mealPlanText = fullText.substring(0, shopIndex).trim();
-        shoppingText = fullText.substring(shopIndex).trim();
-        } else {
-        mealPlanText = fullText;
-        shoppingText = data.shoppingList || data.shopping_list || '';
-}
+                } else {
+          const fullText = data.mealPlan || '';
+          console.log('Full text length:', fullText.length);
+          console.log('Last 500 chars:', fullText.substring(fullText.length - 500));
+
+          // Try multiple shopping list markers
+          let shopIndex = -1;
+          const markers = ['=== Shopping List ===', '### Shopping List', '## Shopping List', '🛒 Shopping List', 'Shopping List'];
+          for (const marker of markers) {
+            shopIndex = fullText.indexOf(marker);
+            if (shopIndex > -1) {
+              console.log('Found marker:', marker, 'at index:', shopIndex);
+              break;
+            }
+          }
+
+          if (shopIndex > -1) {
+            mealPlanText = fullText.substring(0, shopIndex).trim();
+            shoppingText = fullText.substring(shopIndex).trim();
+            console.log('Shopping text length:', shoppingText.length);
+          } else {
+            mealPlanText = fullText;
+            shoppingText = data.shoppingList || data.shopping_list || '';
+            console.log('No shopping marker found in text');
+          }
+
           allergenText = data.allergens || '';
           if (!session.demo && data.remaining !== undefined) {
             session.remaining = data.remaining;
@@ -781,6 +795,13 @@
           render();
         }
       } catch (err) {
+        generating = false;
+        if (err.name !== 'AbortError') {
+          setGenError('Cannot reach server. Check your connection.');
+        }
+        render();
+      }
+    }
         generating = false;
         if (err.name !== 'AbortError') {
           setGenError('Cannot reach server. Check your connection.');
