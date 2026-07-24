@@ -137,17 +137,32 @@
 
     function parseDays(text) {
       const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-      const r = [];
-      for (let i=0; i<days.length; i++) {
+      const result = [];
+      for (let i = 0; i < days.length; i++) {
         const d = days[i], n = days[i+1];
-        const sr = new RegExp(`(?:###\\s*\\*\\*|###\\s*|===?\\s*)\\s*${d}\\s*(?:\\*\\*|===?)?`, 'i');
-        const er = n ? new RegExp(`(?:###\\s*\\*\\*|###\\s*|===?\\s*)\\s*${n}\\s*(?:\\*\\*|===?)?`, 'i') : null;
-        const sm = text.match(sr); if (!sm) continue;
-        const st = sm.index + sm[0].length;
-        const en = er ? (text.match(er)?.index ?? text.length) : text.length;
-        r.push({ day: d, content: text.slice(st, en).trim() });
+        const patterns = [
+          new RegExp(`###\\s*\\*?\\*?\\s*${d}\\s*\\*?\\*?`, 'i'),
+          new RegExp(`===?\\s*${d}\\s*===?`, 'i'),
+          new RegExp(`📅\\s*${d}`, 'i')
+        ];
+        let startMatch = null;
+        for (const p of patterns) {
+          startMatch = text.match(p);
+          if (startMatch) break;
+        }
+        if (!startMatch) continue;
+        const start = startMatch.index + startMatch[0].length;
+        
+        let end = text.length;
+        if (n) {
+          for (const p of [new RegExp(`###\\s*\\*?\\*?\\s*${n}\\s*\\*?\\*?`, 'i'), new RegExp(`===?\\s*${n}\\s*===?`, 'i'), new RegExp(`📅\\s*${n}`, 'i')]) {
+            const em = text.match(p);
+            if (em) { end = em.index; break; }
+          }
+        }
+        result.push({ day: d, content: text.slice(start, end).trim() });
       }
-      return r;
+      return result;
     }
 
               function parseMeals(content) {
@@ -216,42 +231,42 @@
       return meals;
     }
     
-               function parseShoppingList(text) {
+                  function parseShoppingList(text) {
       const lines = text.split('\n');
-      const cats = [];
-      let cur = null;
+      const items = [];
       
       for (const line of lines) {
         let t = line.trim();
         if (!t) continue;
-        t = t.replace(/^[•\-\*]\s*/, '');
-        const c = t.replace(/\*\*/g, '').replace(/^\*\s*/, '').trim();
+        // Remove markdown headers, bullets, asterisks
+        t = t.replace(/^[#]{1,4}\s*/,'').replace(/^[•\-\*]\s*/,'').replace(/\*\*/g,'').trim();
+        if (!t || t.startsWith('---') || t.startsWith('===') || t.startsWith('⚠️') || t.toLowerCase().startsWith('disclaimer')) continue;
         
-        if (/^--/.test(c) || /^⚠️/.test(c) || /^disclaimer/i.test(c)) continue;
+        // Check if this is a category or an item
+        const catKeywords = ['produce', 'protein', 'dairy', 'grain', 'pantry', 'spice', 'condiment', 'bread', 'nuts', 'snack', 'beverage', 'other', 'miscellaneous'];
+        const looksLikeCat = catKeywords.some(k => t.toLowerCase().includes(k)) && 
+                             (t.endsWith(':') || t.endsWith('s') || /^[A-Z][a-z]+/.test(t));
         
-        const catKeywords = ['produce', 'protein', 'dairy', 'grain', 'pantry', 'spice', 'condiment', 'bread', 'nuts', 'snack', 'other', 'miscellaneous'];
-        const isCat = catKeywords.some(k => c.toLowerCase().includes(k)) && 
-                      (c.includes(':') || /^[A-Z][a-z]+(\s+&?\s+[A-Z][a-z]+)*$/.test(c));
-        
-        if (isCat && !cur) {
-          let name = c.replace(/:$/,'').replace(/^\*\s*/,'').trim();
-          const em = {'fresh produce':'🥦','produce':'🥦','protein':'🍗','proteins':'🍗','dairy':'🥛','grains':'🍞','pantry':'🧂','spices':'🌿','condiments':'🧂','breads':'🍞','nuts':'🥜','snacks':'🍿','other':'📦','miscellaneous':'📦'};
-          const k = Object.keys(em).find(x => name.toLowerCase().includes(x));
-          cur = { name, emoji: k ? em[k] : '📦', items: [] };
-          cats.push(cur);
-          const afterColon = c.replace(/^[^:]+:\s*/, '').trim();
-          if (afterColon && afterColon.length > 0 && !afterColon.startsWith('*')) {
-            afterColon.split(',').forEach(item => {
-              const clean = item.trim();
-              if (clean) cur.items.push(clean);
-            });
-            cur = null;
-          }
-        } else if (cur && c) {
-          cur.items.push(c);
+        if (looksLikeCat && t.length < 40 && !t.startsWith('☐')) {
+          const em = {'fresh produce':'🥦','produce':'🥦','protein':'🍗','proteins':'🍗','dairy':'🥛','grains':'🍞','pantry':'🧂','spices':'🌿','condiments':'🧂','breads':'🍞','nuts':'🥜','snacks':'🍿','beverages':'🥤','other':'📦','miscellaneous':'📦'};
+          const k = Object.keys(em).find(x => t.toLowerCase().includes(x));
+          items.push({ type: 'category', text: t, emoji: k ? em[k] : '📦' });
+        } else if (t.length > 5) {
+          items.push({ type: 'item', text: t });
         }
       }
-      return cats;
+      
+      if (!items.length) return '';
+      
+      let html = '';
+      for (const item of items) {
+        if (item.type === 'category') {
+          html += `<div class="shop-category">${item.emoji} ${item.text.replace(/:$/,'')}</div>`;
+        } else {
+          html += `<div class="shop-item"><span class="shop-checkbox">☐</span> ${item.text}</div>`;
+        }
+      }
+      return html;
     }
     
            function renderMealContent(content) {
@@ -269,18 +284,8 @@
       }).join('');
     }
 
-           function renderShoppingList(text) {
-      const cats = parseShoppingList(text);
-      if (!cats.length) {
-        return text.split('\n').filter(l => {
-          const t = l.trim().replace(/^[•\-\*]\s*/, '');
-          return t && !t.startsWith('---') && !t.startsWith('===') && !t.startsWith('⚠️');
-        }).map(l => `<div class="shop-item"><span class="shop-checkbox">☐</span> ${l.trim().replace(/^[•\-\*]\s*/,'').replace(/\*\*/g,'')}</div>`).join('');
-      }
-      return cats.map(c => 
-        `<div class="shop-category">${c.emoji} ${c.name}</div>
-        ${c.items.map(i => `<div class="shop-item"><span class="shop-checkbox">☐</span> ${i}</div>`).join('')}`
-      ).join('');
+               function renderShoppingList(text) {
+      return parseShoppingList(text);
     }
 
     const app = document.getElementById('app');
@@ -347,7 +352,10 @@
           if(!days.length) return `<div class="card card-left-border"><pre style="white-space:pre-wrap;font-size:14px;">${mealPlanText}</pre></div>`;
           return days.map(({day,content})=>`<div class="card card-left-border day-card"><h3 class="day-heading">📅 ${day}</h3>${renderMealContent(content)}</div>`).join('');
         })();
-        if(shoppingText) document.getElementById('shopList').innerHTML = renderShoppingList(shoppingText);
+                if(shoppingText) {
+          const shopHTML = renderShoppingList(shoppingText);
+          if (shopHTML) document.getElementById('shopList').innerHTML = shopHTML;
+          else document.getElementById('shopList').parentElement.style.display = 'none';
       }
       document.getElementById('logoutBtn').addEventListener('click',()=>{clearSession();session=null;planPaid=false;mealPlanText='';shoppingText='';allergenText='';render();});
       document.getElementById('payNowBtn').addEventListener('click', startPayment);
@@ -374,9 +382,22 @@
         const d=await r.json();
         if(!r.ok||d.error){setGenError(d.error||'Something went wrong.');generating=false;render();}
         else {
-          const fullText = d.mealPlan || '';
-          const shopMarker = '### Shopping List';
-          const shopIndex = fullText.indexOf(shopMarker);
+          let fullText = d.mealPlan || '';
+          
+          // Remove intro text before the first day
+          const firstDayMatch = fullText.match(/(?:###\s*\*?\*?\s*Monday|===?\s*Monday)/i);
+          if (firstDayMatch && firstDayMatch.index > 0) {
+            fullText = fullText.substring(firstDayMatch.index);
+          }
+          
+          // Find shopping list using multiple markers
+          const shopMarkers = ['### Shopping List', '=== Shopping List', '## Shopping List', '🛒 Shopping List', '**Shopping List**'];
+          let shopIndex = -1;
+          for (const m of shopMarkers) {
+            shopIndex = fullText.indexOf(m);
+            if (shopIndex > -1) break;
+          }
+          
           if (shopIndex > -1) {
             mealPlanText = fullText.substring(0, shopIndex).trim();
             shoppingText = fullText.substring(shopIndex).trim();
