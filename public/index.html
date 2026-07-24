@@ -150,34 +150,54 @@
       return r;
     }
 
-    function parseMeals(content) {
+       function parseMeals(content) {
       const meals = [];
       const lines = content.split('\n');
-      let cur = null, sec = '';
+      let cur = null;
+      
       for (const line of lines) {
-        const t = line.trim(); if (!t) continue;
-        const c = t.replace(/\*\*/g, '');
-        if (/^(🌅|🍌|🥗|🥕|🍽️)\s*\*\*?.*?:/i.test(t)) {
+        const t = line.trim();
+        if (!t) continue;
+        
+        // Detect meal heading with emoji: "🌅 Breakfast: **Oats & Banana Porridge** (15 min | ...)"
+        if (/^(🌅|🍌|🥗|🥕|🍽️)\s/i.test(t)) {
           if (cur && (cur.ingredients.length || cur.steps.length)) meals.push(cur);
-          const mm = c.match(/\(([^)]+)\)/); const meta = mm ? mm[1] : '';
-          const name = c.replace(/\s*\(.*\)\s*$/,'').trim();
-          cur = { name, meta, ingredients: [], steps: [], healthy: '', allergens: '' }; sec = '';
+          
+          // Extract metadata from parentheses at the end
+          const metaMatch = t.match(/\(([^)]+)\)\s*$/);
+          const meta = metaMatch ? metaMatch[1] : '';
+          
+          // Get the full meal line, remove the emoji prefix and metadata
+          let name = t.replace(/^[🌅🍌🥗🥕🍽️]\s*/,'').trim();
+          name = name.replace(/\s*\([^)]+\)\s*$/,'').trim();
+          // Remove ** bold markers from name
+          name = name.replace(/\*\*/g,'');
+          
+          cur = { name, meta, ingredients: [], steps: [], healthy: '', allergens: '' };
         } else if (cur) {
-          if (/\*\*ingredients?:?\*\*/i.test(t) || /^ingredients?:/i.test(c)) {
-            sec = 'ingredients'; const rest = c.replace(/^ingredients?:\s*/i,'').trim(); if (rest) cur.ingredients.push(rest);
-          } else if (/\*\*(steps?|instructions?):?\*\*/i.test(t) || /^(steps?|instructions?):/i.test(c)) {
-            sec = 'steps'; const rest = c.replace(/^(steps?|instructions?):\s*/i,'').trim(); if (rest) cur.steps.push(rest);
-          } else if (/\*\*(why it.?s healthy|healthy):?\*\*/i.test(t) || /^(why it.?s healthy|healthy):/i.test(c)) {
-            sec = 'healthy'; cur.healthy = c.replace(/^(why it.?s healthy|healthy):\s*/i,'').replace(/^Allergens:.*$/i,'').trim();
-            const am = t.match(/\*\*Allergens?:?\*\*\s*(.+)$/i) || c.match(/Allergens?:\s*(.+)$/i);
-            if (am) cur.allergens = am[1].trim();
-          } else if (/\*\*allergens?:?\*\*/i.test(t) || /^allergens?:/i.test(c)) {
-            sec = 'allergens'; cur.allergens = c.replace(/^allergens?:\s*/i,'').trim();
-          } else if (/^daily total:/i.test(c) || /^\*\*daily total:?\*\*/i.test(t)) {
-            sec = '';
-          } else if (sec==='ingredients' && c) { cur.ingredients.push(c); }
-          else if (sec==='steps' && c) { cur.steps.push(c); }
-          else if (sec==='healthy' && c && !cur.healthy) { cur.healthy = c.replace(/^Allergens:.*$/i,'').trim(); }
+          // Check for section headers
+          if (/^ingredients?:/i.test(t)) {
+            const rest = t.replace(/^ingredients?:\s*/i,'').trim();
+            if (rest) cur.ingredients.push(rest);
+          } else if (/^(steps?|instructions?):/i.test(t)) {
+            const rest = t.replace(/^(steps?|instructions?):\s*/i,'').trim();
+            if (rest) cur.steps.push(rest);
+          } else if (/^(why it.?s healthy|healthy):/i.test(t)) {
+            cur.healthy = t.replace(/^(why it.?s healthy|healthy):\s*/i,'').trim();
+            // Check for allergens on same line
+            const allerMatch = t.match(/allergens?:\s*(.+)$/i);
+            if (allerMatch) cur.allergens = allerMatch[1].trim();
+          } else if (/^allergens?:/i.test(t)) {
+            cur.allergens = t.replace(/^allergens?:\s*/i,'').trim();
+          } else if (/^daily total:/i.test(t)) {
+            // End of day, skip
+          } else if (cur.ingredients !== undefined && cur.steps.length === 0 && cur.healthy === '') {
+            // Still collecting ingredients
+            cur.ingredients.push(t);
+          } else if (cur.steps.length > 0 && cur.healthy === '') {
+            // Still collecting steps
+            cur.steps.push(t);
+          }
         }
       }
       if (cur && (cur.ingredients.length || cur.steps.length)) meals.push(cur);
