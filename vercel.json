@@ -3,5 +3,8 @@
     "api/generate-mealplan.js": {
       "maxDuration": 60
     }
-  }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/public/$1" }
+  ]
 }
