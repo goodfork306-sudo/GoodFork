@@ -216,7 +216,7 @@
       return meals;
     }
     
-           function parseShoppingList(text) {
+               function parseShoppingList(text) {
       const lines = text.split('\n');
       const cats = [];
       let cur = null;
@@ -224,32 +224,28 @@
       for (const line of lines) {
         let t = line.trim();
         if (!t) continue;
-        // Remove leading bullet markers, dashes, asterisks
         t = t.replace(/^[•\-\*]\s*/, '');
-        const c = t.replace(/\*\*/g, '').trim();
+        const c = t.replace(/\*\*/g, '').replace(/^\*\s*/, '').trim();
         
-        // Skip separators and disclaimer
         if (/^--/.test(c) || /^⚠️/.test(c) || /^disclaimer/i.test(c)) continue;
         
-        // Category heading: contains a category keyword followed by a colon or items
-        const catKeywords = ['produce', 'protein', 'dairy', 'grain', 'pantry', 'spice', 'condiment', 'bread', 'nuts', 'other', 'miscellaneous'];
+        const catKeywords = ['produce', 'protein', 'dairy', 'grain', 'pantry', 'spice', 'condiment', 'bread', 'nuts', 'snack', 'other', 'miscellaneous'];
         const isCat = catKeywords.some(k => c.toLowerCase().includes(k)) && 
                       (c.includes(':') || /^[A-Z][a-z]+(\s+&?\s+[A-Z][a-z]+)*$/.test(c));
         
         if (isCat && !cur) {
-          const name = c.replace(/:$/,'').trim();
-          const em = {'fresh produce':'🥦','produce':'🥦','protein':'🍗','proteins':'🍗','dairy':'🥛','grains':'🍞','pantry':'🧂','spices':'🌿','condiments':'🧂','breads':'🍞','nuts':'🥜','other':'📦','miscellaneous':'📦'};
+          let name = c.replace(/:$/,'').replace(/^\*\s*/,'').trim();
+          const em = {'fresh produce':'🥦','produce':'🥦','protein':'🍗','proteins':'🍗','dairy':'🥛','grains':'🍞','pantry':'🧂','spices':'🌿','condiments':'🧂','breads':'🍞','nuts':'🥜','snacks':'🍿','other':'📦','miscellaneous':'📦'};
           const k = Object.keys(em).find(x => name.toLowerCase().includes(x));
           cur = { name, emoji: k ? em[k] : '📦', items: [] };
           cats.push(cur);
-          // Check if there are items on the same line after colon
           const afterColon = c.replace(/^[^:]+:\s*/, '').trim();
-          if (afterColon && afterColon.length > 0) {
+          if (afterColon && afterColon.length > 0 && !afterColon.startsWith('*')) {
             afterColon.split(',').forEach(item => {
               const clean = item.trim();
               if (clean) cur.items.push(clean);
             });
-            cur = null; // Reset for next category
+            cur = null;
           }
         } else if (cur && c) {
           cur.items.push(c);
@@ -269,7 +265,7 @@
         const stp = m.steps.length ? `<p style="font-weight:700;color:#2D6A4F;margin-top:8px;">👨‍🍳 Steps</p><ol class="step-list">${m.steps.map((s,i)=>`<li>${s.replace(/^\d+\.\s|-\s/,'')}</li>`).join('')}</ol>` : '';
         const hl = m.healthy ? `<div class="healthy-note">💚 <strong>Why it's healthy:</strong> ${m.healthy}</div>` : '';
         const al = m.allergens ? `<div class="allergen-box ${m.allergens.toLowerCase().includes('none')?'allergen-safe':'allergen-warn'}">${m.allergens.toLowerCase().includes('none')?'✅ No common allergens':`⚠️ <strong>Allergens:</strong> ${m.allergens}`}</div>` : '';
-        return `<div class="meal-block"><div class="meal-name">${m.name}</div>${mb}${ing}${stp}${hl}${al}</div>`;
+        return `<div class="meal-block"><div class="meal-name">${m.name.replace(/^[�]\s*/, '')}</div>${mb}${ing}${stp}${hl}${al}</div>`;
       }).join('');
     }
 
