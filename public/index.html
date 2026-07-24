@@ -232,93 +232,104 @@
 
     // ─── PARSER ───────────────────────────────────────────────────────
     function parseDays(text) {
-      const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-      const result = [];
-      for (let i = 0; i < days.length; i++) {
-        const day = days[i];
-        const next = days[i + 1];
-        const startRe = new RegExp(`(?:===|###)\\s*${day}\\s*(?:===|###)?`, 'i');
-        const endRe = next ? new RegExp(`(?:===|###)\\s*${next}\\s*(?:===|###)?`, 'i') : null;
-        const startMatch = text.match(startRe);
-        if (!startMatch) continue;
-        const start = startMatch.index + startMatch[0].length;
-        const end = endRe ? (text.match(endRe)?.index ?? text.length) : text.length;
-        result.push({ day, content: text.slice(start, end).trim() });
-      }
-      return result;
-    }
+  const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const result = [];
+  for (let i = 0; i < days.length; i++) {
+    const day = days[i];
+    const next = days[i + 1];
+    // Match: ### **Monday** or === Monday === or ### Monday
+    const startRe = new RegExp(`(?:###\\s*\\*\\*|###\\s*|===?\\s*)\\s*${day}\\s*(?:\\*\\*|===?)?`, 'i');
+    const endRe = next ? new RegExp(`(?:###\\s*\\*\\*|###\\s*|===?\\s*)\\s*${next}\\s*(?:\\*\\*|===?)?`, 'i') : null;
+    const startMatch = text.match(startRe);
+    if (!startMatch) continue;
+    const start = startMatch.index + startMatch[0].length;
+    const end = endRe ? (text.match(endRe)?.index ?? text.length) : text.length;
+    result.push({ day, content: text.slice(start, end).trim() });
+  }
+  return result;
+}
 
     function parseMeals(content) {
-      const meals = [];
-      const lines = content.split('\n');
-      let currentMeal = null;
-      let section = '';
-      
-      for (const line of lines) {
-        const trimmed = line.trim();
-        if (!trimmed) continue;
-        const cleaned = trimmed.replace(/\*\*/g, '');
-        
-        if (/^(🌅|🍌|🥗|🥕|🍽️)\s*.*?:/i.test(trimmed) || /^(breakfast|morning snack|lunch|afternoon snack|dinner):/i.test(cleaned)) {
-          if (currentMeal && (currentMeal.ingredients.length || currentMeal.steps.length)) {
-            meals.push(currentMeal);
-          }
-          // Extract metadata from parentheses
-          const metaMatch = cleaned.match(/\(([^)]+)\)/);
-          const meta = metaMatch ? metaMatch[1] : '';
-          const name = cleaned.replace(/\s*\(.*\)\s*$/, '').trim();
-          currentMeal = { name, meta, ingredients: [], steps: [], healthy: '', allergens: '' };
-          section = '';
-        } else if (currentMeal) {
-          if (/^(ingredients?):/i.test(cleaned)) {
-            section = 'ingredients';
-            const rest = cleaned.replace(/^ingredients?:\s*/i, '').trim();
-            if (rest) currentMeal.ingredients.push(rest);
-          } else if (/^(steps?|instructions?):/i.test(cleaned)) {
-            section = 'steps';
-            const rest = cleaned.replace(/^(steps?|instructions?):\s*/i, '').trim();
-            if (rest) currentMeal.steps.push(rest);
-          } else if (/^(why it.?s healthy|healthy):/i.test(cleaned)) {
-            section = 'healthy';
-            currentMeal.healthy = cleaned.replace(/^(why it.?s healthy|healthy):\s*/i, '').trim();
-          } else if (/^allergens?:/i.test(cleaned)) {
-            section = 'allergens';
-            currentMeal.allergens = cleaned.replace(/^allergens?:\s*/i, '').trim();
-          } else if (/^daily total:/i.test(cleaned)) {
-            section = '';
-          } else if (section === 'ingredients' && cleaned) {
-            currentMeal.ingredients.push(cleaned);
-          } else if (section === 'steps' && cleaned) {
-            currentMeal.steps.push(cleaned);
-          }
-        }
-      }
+  const meals = [];
+  const lines = content.split('\n');
+  let currentMeal = null;
+  let section = '';
+  
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    // Remove bold markers for matching
+    const cleaned = trimmed.replace(/\*\*/g, '');
+    
+    // Detect meal heading with emoji
+    if (/^(🌅|🍌|🥗|🥕|🍽️)\s*\*\*?.*?:/i.test(trimmed)) {
       if (currentMeal && (currentMeal.ingredients.length || currentMeal.steps.length)) {
         meals.push(currentMeal);
       }
-      return meals;
+      const metaMatch = cleaned.match(/\(([^)]+)\)/);
+      const meta = metaMatch ? metaMatch[1] : '';
+      const name = cleaned.replace(/\s*\(.*\)\s*$/, '').trim();
+      currentMeal = { name, meta, ingredients: [], steps: [], healthy: '', allergens: '' };
+      section = '';
+    } else if (currentMeal) {
+      if (/\*\*ingredients?:?\*\*/i.test(trimmed) || /^ingredients?:/i.test(cleaned)) {
+        section = 'ingredients';
+        const rest = cleaned.replace(/^ingredients?:\s*/i, '').trim();
+        if (rest) currentMeal.ingredients.push(rest);
+      } else if (/\*\*(steps?|instructions?):?\*\*/i.test(trimmed) || /^(steps?|instructions?):/i.test(cleaned)) {
+        section = 'steps';
+        const rest = cleaned.replace(/^(steps?|instructions?):\s*/i, '').trim();
+        if (rest) currentMeal.steps.push(rest);
+      } else if (/\*\*(why it.?s healthy|healthy):?\*\*/i.test(trimmed) || /^(why it.?s healthy|healthy):/i.test(cleaned)) {
+        section = 'healthy';
+        currentMeal.healthy = cleaned.replace(/^(why it.?s healthy|healthy):\s*/i, '').replace(/^Allergens:.*$/i, '').trim();
+        // Check for allergens on same line
+        const allerMatch = trimmed.match(/\*\*Allergens?:?\*\*\s*(.+)$/i) || cleaned.match(/Allergens?:\s*(.+)$/i);
+        if (allerMatch) currentMeal.allergens = allerMatch[1].trim();
+      } else if (/\*\*allergens?:?\*\*/i.test(trimmed) || /^allergens?:/i.test(cleaned)) {
+        section = 'allergens';
+        currentMeal.allergens = cleaned.replace(/^allergens?:\s*/i, '').trim();
+      } else if (/^daily total:/i.test(cleaned) || /^\*\*daily total:?\*\*/i.test(trimmed)) {
+        section = '';
+      } else if (section === 'ingredients' && cleaned) {
+        currentMeal.ingredients.push(cleaned);
+      } else if (section === 'steps' && cleaned) {
+        currentMeal.steps.push(cleaned);
+      } else if (section === 'healthy' && cleaned && !currentMeal.healthy) {
+        currentMeal.healthy = cleaned.replace(/^Allergens:.*$/i, '').trim();
+      }
+    }
+  }
+  if (currentMeal && (currentMeal.ingredients.length || currentMeal.steps.length)) {
+    meals.push(currentMeal);
+  }
+  return meals;
     }
 
     function parseShoppingList(text) {
-      const lines = text.split('\n');
-      const categories = [];
-      let currentCategory = null;
-      
-      for (const line of lines) {
-        const trimmed = line.trim();
-        if (!trimmed) continue;
-        // Category heading detection
-        if (/^(fresh produce|proteins|dairy|grains|pantry|spices|condiments|breads)/i.test(trimmed.replace(/\*\*/g, '').replace(/:$/, ''))) {
-          const cleaned = trimmed.replace(/\*\*/g, '').replace(/:$/, '').trim();
-          const emojis = { 'fresh produce': '🥦', 'proteins': '🍗', 'dairy': '🥛', 'grains': '🍞', 'pantry': '🧂', 'spices': '🌿', 'condiments': '🧂', 'breads': '🍞' };
-          const key = Object.keys(emojis).find(k => cleaned.toLowerCase().includes(k));
-          currentCategory = { name: cleaned, emoji: key ? emojis[key] : '📦', items: [] };
-          categories.push(currentCategory);
-        } else if (currentCategory) {
-          currentCategory.items.push(trimmed);
-        }
-      }
-      return categories;
+  const lines = text.split('\n');
+  const categories = [];
+  let currentCategory = null;
+  
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    const cleaned = trimmed.replace(/\*\*/g, '').replace(/^####\s*/, '').replace(/^###\s*/, '').replace(/:$/, '').trim();
+    
+    // Category heading: #### Protein, ### Fresh Produce, etc.
+    if (/^#{1,4}\s+/i.test(trimmed) || /^(fresh produce|proteins?|dairy|grains|pantry|spices|condiments|breads)/i.test(cleaned)) {
+      const name = cleaned.replace(/^#{1,4}\s*/, '').replace(/:$/, '').trim();
+      const emojis = { 'fresh produce': '🥦', 'produce': '🥦', 'protein': '🍗', 'proteins': '🍗', 'dairy': '🥛', 'grains': '🍞', 'pantry': '🧂', 'spices': '🌿', 'condiments': '🧂', 'breads': '🍞' };
+      const key = Object.keys(emojis).find(k => cleaned.toLowerCase().includes(k));
+      currentCategory = { name, emoji: key ? emojis[key] : '📦', items: [] };
+      categories.push(currentCategory);
+    } else if (currentCategory) {
+      // Remove leading dashes, asterisks, bullet points
+      const item = cleaned.replace(/^[-*•]\s*/, '').replace(/^☐\s*/, '').trim();
+      if (item) currentCategory.items.push(item);
+    }
+  }
+  return categories;
     }
 
     // ─── RENDERERS ────────────────────────────────────────────────────
