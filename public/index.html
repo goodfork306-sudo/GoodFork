@@ -19,150 +19,69 @@
       min-height: 100vh;
     }
     .container { max-width: 800px; margin: 0 auto; padding: 0 16px; }
-    
-    /* Header */
-    .header {
-      background: white;
-      border-bottom: 1px solid #e0d8c0;
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      padding: 12px 0;
-    }
-    .header-inner {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 0 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
+    .header { background: white; border-bottom: 1px solid #e0d8c0; position: sticky; top: 0; z-index: 40; padding: 12px 0; }
+    .header-inner { max-width: 800px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
     .header-logo { height: 50px; width: auto; }
     .header-badges { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; font-weight: 700; }
-    
-    /* Badges */
     .badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
     .badge-demo { background: #fffbcc; color: #7a6000; }
     .badge-plans { color: #E76F51; }
     .badge-season { color: #2D6A4F; }
-    
-    /* Buttons */
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      padding: 10px 20px; border-radius: 12px; font-weight: 800; font-size: 14px;
-      cursor: pointer; border: none; transition: all 0.2s; text-decoration: none;
-    }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; border: none; transition: all 0.2s; text-decoration: none; }
     .btn-primary { background: #E76F51; color: white; }
     .btn-primary:hover { background: #d45a3f; }
     .btn-outline { background: transparent; border: 2px solid #2D6A4F; color: #2D6A4F; }
     .btn-outline:hover { background: #f0f7f0; }
     .btn-sm { padding: 6px 14px; font-size: 12px; }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    
-    /* Cards */
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 24px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    }
+    .card { background: white; border-radius: 16px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
     .card-left-border { border-left: 6px solid #2D6A4F; }
     .card-green { background: #F0F7F0; }
-    
-    /* Forms */
     .form-group { margin-bottom: 16px; }
     .form-label { display: block; font-weight: 700; font-size: 14px; color: #2D6A4F; margin-bottom: 6px; }
-    .form-input, .form-select {
-      width: 100%; padding: 10px 14px; border: 2px solid #d4e8d4; border-radius: 12px;
-      font-size: 14px; font-family: inherit; background: #fafff8; transition: border-color 0.2s;
-    }
+    .form-input, .form-select { width: 100%; padding: 10px 14px; border: 2px solid #d4e8d4; border-radius: 12px; font-size: 14px; font-family: inherit; background: #fafff8; transition: border-color 0.2s; }
     .form-input:focus, .form-select:focus { outline: none; border-color: #2D6A4F; }
-    
-    /* Diet pills */
     .diet-pills { display: flex; flex-wrap: wrap; gap: 8px; }
-    .diet-pill {
-      padding: 8px 14px; border-radius: 12px; font-size: 13px; font-weight: 700;
-      cursor: pointer; border: 2px solid #d4e8d4; background: transparent; color: #666;
-      transition: all 0.2s; font-family: inherit;
-    }
+    .diet-pill { padding: 8px 14px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; border: 2px solid #d4e8d4; background: transparent; color: #666; transition: all 0.2s; font-family: inherit; }
     .diet-pill.active { border-color: #2D6A4F; background: #f0f7f0; color: #2D6A4F; }
-    
-    /* Day card */
     .day-card { margin-bottom: 24px; }
     .day-heading { font-size: 22px; font-weight: 800; color: #2D6A4F; margin-bottom: 16px; }
     .meal-block { border-top: 1px solid #E8E8E8; padding: 16px 0; }
     .meal-block:first-child { border-top: none; padding-top: 0; }
     .meal-name { font-size: 17px; font-weight: 700; color: #333; margin-bottom: 8px; }
-    
-    /* Macro badges */
     .macro-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
-    .macro-badge {
-      padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;
-      display: inline-flex; align-items: center; gap: 3px;
-    }
+    .macro-badge { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 3px; }
     .macro-time { background: #FFF3CD; color: #856404; }
     .macro-diff { background: #D4EDDA; color: #155724; }
     .macro-cal { background: #FFE5CC; color: #7a3d00; }
     .macro-macros { background: #CCE5FF; color: #004085; }
-    
-    /* Lists */
     .ingredient-list { list-style: none; padding: 0; margin: 8px 0; }
     .ingredient-list li { padding: 2px 0; font-size: 14px; color: #555; }
     .step-list { padding-left: 24px; margin: 8px 0; }
     .step-list li { padding: 3px 0; font-size: 14px; color: #555; }
-    
-    /* Healthy note */
-    .healthy-note {
-      background: #f0f7f0; border-radius: 10px; padding: 10px 14px;
-      font-size: 13px; font-style: italic; color: #2D6A4F; margin: 10px 0;
-    }
-    
-    /* Allergen box */
+    .healthy-note { background: #f0f7f0; border-radius: 10px; padding: 10px 14px; font-size: 13px; font-style: italic; color: #2D6A4F; margin: 10px 0; }
     .allergen-box { margin: 8px 0; font-size: 13px; }
     .allergen-warn { color: #c0392b; }
     .allergen-safe { color: #27ae60; }
-    
-    /* Shopping list */
     .shop-category { font-size: 16px; font-weight: 800; color: #2D6A4F; margin-top: 20px; margin-bottom: 8px; }
     .shop-item { padding: 4px 0; font-size: 14px; color: #555; display: flex; align-items: center; gap: 8px; }
     .shop-checkbox { color: #2D6A4F; font-size: 16px; }
-    
-    /* Daily total */
     .daily-total { text-align: center; font-weight: 800; color: #2D6A4F; padding: 12px 0; font-size: 15px; }
-    
-    /* Modal */
-    .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 50;
-      display: flex; align-items: center; justify-content: center; padding: 16px;
-    }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; }
     .modal { background: white; border-radius: 16px; padding: 24px; max-width: 400px; width: 100%; }
-    
-    /* Progress */
     .progress-container { text-align: center; padding: 40px 20px; }
     .pulse-emoji { font-size: 60px; animation: pulse 1.5s ease-in-out infinite; display: block; margin-bottom: 20px; }
     @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
     .progress-bar { width: 100%; height: 8px; background: #E8E8E8; border-radius: 4px; overflow: hidden; margin: 16px 0; }
     .progress-fill { height: 100%; background: #2D6A4F; border-radius: 4px; animation: fillBar 30s ease-out forwards; }
     @keyframes fillBar { 0% { width: 0%; } 100% { width: 90%; } }
-    
-    /* Footer */
-    .disclaimer {
-      background: #f5f0e0; border-top: 1px solid #e0d8c0; padding: 14px 16px;
-      font-size: 11px; color: #888; text-align: center; margin-top: auto;
-    }
-    
-    /* Utilities */
+    .disclaimer { background: #f5f0e0; border-top: 1px solid #e0d8c0; padding: 14px 16px; font-size: 11px; color: #888; text-align: center; margin-top: auto; }
     .text-center { text-align: center; }
     .mt-1 { margin-top: 4px; } .mt-2 { margin-top: 8px; } .mt-4 { margin-top: 16px; } .mt-6 { margin-top: 24px; } .mt-8 { margin-top: 32px; }
     .mb-2 { margin-bottom: 8px; } .mb-4 { margin-bottom: 16px; } .mb-6 { margin-bottom: 24px; }
     .hidden { display: none !important; }
     .flex { display: flex; } .flex-wrap { flex-wrap: wrap; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; } .gap-4 { gap: 16px; }
     .w-full { width: 100%; }
-    
-    /* Print */
     @media print {
       body { background: white; font-size: 12px; }
       .header, .no-print, .disclaimer-footer { display: none !important; }
@@ -170,8 +89,6 @@
       .day-card { page-break-before: always; }
       .day-card:first-child { page-break-before: avoid; }
     }
-    
-    /* Mobile */
     @media (max-width: 600px) {
       .header-logo { height: 36px; }
       .card { padding: 16px; }
@@ -183,11 +100,9 @@
 <body>
   <div id="app"></div>
   <script>
-    // ─── CONFIG ──────────────────────────────────────────────────────
     const BACKEND = 'https://good-fork.vercel.app';
     const PAYHIP_STORE = 'https://payhip.com/GoodFork';
     const PAYHIP_SINGLE_ID = 'kv4Q3';
-    
     const LOGO_URL = '/goodfork_app_logo.png';
     const BANNER_URL = '/goodfork_app_banner_v2.png';
     const SINGLE_IMG = '/goodfork-single-cover.png';
@@ -195,8 +110,7 @@
     const SEASONAL_IMG = '/goodfork-seasonal-cover.png';
     const YEARLY_IMG = '/goodfork-yearly-cover.png';
 
-    // ─── STATE ────────────────────────────────────────────────────────
-    let session = null; // { email, remaining, max, seasonal, demo, sessionId }
+    let session = null;
     let planPaid = false;
     let mealPlanText = '';
     let shoppingText = '';
@@ -204,251 +118,118 @@
     let generating = false;
     let genAbortController = null;
 
-    // ─── HELPERS ──────────────────────────────────────────────────────
     function genSessionId() { return 'sess_' + Math.random().toString(36).slice(2, 10); }
-    
     function saveSession(s) { localStorage.setItem('gf_session', JSON.stringify(s)); }
-    function loadSession() {
-      const raw = localStorage.getItem('gf_session');
-      return raw ? JSON.parse(raw) : null;
-    }
+    function loadSession() { const r = localStorage.getItem('gf_session'); return r ? JSON.parse(r) : null; }
     function clearSession() { localStorage.removeItem('gf_session'); }
 
     function getSeason(country) {
-      const southern = ['South Africa', 'Nigeria', 'Kenya', 'Australia'];
-      const month = new Date().getMonth() + 1;
-      if (southern.includes(country)) {
-        if ([12,1,2].includes(month)) return '☀️ Summer';
-        if ([3,4,5].includes(month)) return '🍂 Autumn';
-        if ([6,7,8].includes(month)) return '❄️ Winter';
-        return '🌱 Spring';
+      const s = ['South Africa','Nigeria','Kenya','Australia'];
+      const m = new Date().getMonth() + 1;
+      if (s.includes(country)) {
+        if ([12,1,2].includes(m)) return '☀️ Summer'; if ([3,4,5].includes(m)) return '🍂 Autumn';
+        if ([6,7,8].includes(m)) return '❄️ Winter'; return '🌱 Spring';
       } else {
-        if ([12,1,2].includes(month)) return '❄️ Winter';
-        if ([3,4,5].includes(month)) return '🌱 Spring';
-        if ([6,7,8].includes(month)) return '☀️ Summer';
-        return '🍂 Autumn';
+        if ([12,1,2].includes(m)) return '❄️ Winter'; if ([3,4,5].includes(m)) return '🌱 Spring';
+        if ([6,7,8].includes(m)) return '☀️ Summer'; return '🍂 Autumn';
       }
     }
 
-    // ─── PARSER ───────────────────────────────────────────────────────
     function parseDays(text) {
-  const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-  const result = [];
-  for (let i = 0; i < days.length; i++) {
-    const day = days[i];
-    const next = days[i + 1];
-    // Match: ### **Monday** or === Monday === or ### Monday
-    const startRe = new RegExp(`(?:###\\s*\\*\\*|###\\s*|===?\\s*)\\s*${day}\\s*(?:\\*\\*|===?)?`, 'i');
-    const endRe = next ? new RegExp(`(?:###\\s*\\*\\*|###\\s*|===?\\s*)\\s*${next}\\s*(?:\\*\\*|===?)?`, 'i') : null;
-    const startMatch = text.match(startRe);
-    if (!startMatch) continue;
-    const start = startMatch.index + startMatch[0].length;
-    const end = endRe ? (text.match(endRe)?.index ?? text.length) : text.length;
-    result.push({ day, content: text.slice(start, end).trim() });
-  }
-  return result;
-}
+      const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+      const r = [];
+      for (let i=0; i<days.length; i++) {
+        const d = days[i], n = days[i+1];
+        const sr = new RegExp(`(?:###\\s*\\*\\*|###\\s*|===?\\s*)\\s*${d}\\s*(?:\\*\\*|===?)?`, 'i');
+        const er = n ? new RegExp(`(?:###\\s*\\*\\*|###\\s*|===?\\s*)\\s*${n}\\s*(?:\\*\\*|===?)?`, 'i') : null;
+        const sm = text.match(sr); if (!sm) continue;
+        const st = sm.index + sm[0].length;
+        const en = er ? (text.match(er)?.index ?? text.length) : text.length;
+        r.push({ day: d, content: text.slice(st, en).trim() });
+      }
+      return r;
+    }
 
     function parseMeals(content) {
-  const meals = [];
-  const lines = content.split('\n');
-  let currentMeal = null;
-  let section = '';
-  
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-    // Remove bold markers for matching
-    const cleaned = trimmed.replace(/\*\*/g, '');
-    
-    // Detect meal heading with emoji
-    if (/^(🌅|🍌|🥗|🥕|🍽️)\s*\*\*?.*?:/i.test(trimmed)) {
-      if (currentMeal && (currentMeal.ingredients.length || currentMeal.steps.length)) {
-        meals.push(currentMeal);
+      const meals = [];
+      const lines = content.split('\n');
+      let cur = null, sec = '';
+      for (const line of lines) {
+        const t = line.trim(); if (!t) continue;
+        const c = t.replace(/\*\*/g, '');
+        if (/^(🌅|🍌|🥗|🥕|🍽️)\s*\*\*?.*?:/i.test(t)) {
+          if (cur && (cur.ingredients.length || cur.steps.length)) meals.push(cur);
+          const mm = c.match(/\(([^)]+)\)/); const meta = mm ? mm[1] : '';
+          const name = c.replace(/\s*\(.*\)\s*$/,'').trim();
+          cur = { name, meta, ingredients: [], steps: [], healthy: '', allergens: '' }; sec = '';
+        } else if (cur) {
+          if (/\*\*ingredients?:?\*\*/i.test(t) || /^ingredients?:/i.test(c)) {
+            sec = 'ingredients'; const rest = c.replace(/^ingredients?:\s*/i,'').trim(); if (rest) cur.ingredients.push(rest);
+          } else if (/\*\*(steps?|instructions?):?\*\*/i.test(t) || /^(steps?|instructions?):/i.test(c)) {
+            sec = 'steps'; const rest = c.replace(/^(steps?|instructions?):\s*/i,'').trim(); if (rest) cur.steps.push(rest);
+          } else if (/\*\*(why it.?s healthy|healthy):?\*\*/i.test(t) || /^(why it.?s healthy|healthy):/i.test(c)) {
+            sec = 'healthy'; cur.healthy = c.replace(/^(why it.?s healthy|healthy):\s*/i,'').replace(/^Allergens:.*$/i,'').trim();
+            const am = t.match(/\*\*Allergens?:?\*\*\s*(.+)$/i) || c.match(/Allergens?:\s*(.+)$/i);
+            if (am) cur.allergens = am[1].trim();
+          } else if (/\*\*allergens?:?\*\*/i.test(t) || /^allergens?:/i.test(c)) {
+            sec = 'allergens'; cur.allergens = c.replace(/^allergens?:\s*/i,'').trim();
+          } else if (/^daily total:/i.test(c) || /^\*\*daily total:?\*\*/i.test(t)) {
+            sec = '';
+          } else if (sec==='ingredients' && c) { cur.ingredients.push(c); }
+          else if (sec==='steps' && c) { cur.steps.push(c); }
+          else if (sec==='healthy' && c && !cur.healthy) { cur.healthy = c.replace(/^Allergens:.*$/i,'').trim(); }
+        }
       }
-      const metaMatch = cleaned.match(/\(([^)]+)\)/);
-      const meta = metaMatch ? metaMatch[1] : '';
-      const name = cleaned.replace(/\s*\(.*\)\s*$/, '').trim();
-      currentMeal = { name, meta, ingredients: [], steps: [], healthy: '', allergens: '' };
-      section = '';
-    } else if (currentMeal) {
-      if (/\*\*ingredients?:?\*\*/i.test(trimmed) || /^ingredients?:/i.test(cleaned)) {
-        section = 'ingredients';
-        const rest = cleaned.replace(/^ingredients?:\s*/i, '').trim();
-        if (rest) currentMeal.ingredients.push(rest);
-      } else if (/\*\*(steps?|instructions?):?\*\*/i.test(trimmed) || /^(steps?|instructions?):/i.test(cleaned)) {
-        section = 'steps';
-        const rest = cleaned.replace(/^(steps?|instructions?):\s*/i, '').trim();
-        if (rest) currentMeal.steps.push(rest);
-      } else if (/\*\*(why it.?s healthy|healthy):?\*\*/i.test(trimmed) || /^(why it.?s healthy|healthy):/i.test(cleaned)) {
-        section = 'healthy';
-        currentMeal.healthy = cleaned.replace(/^(why it.?s healthy|healthy):\s*/i, '').replace(/^Allergens:.*$/i, '').trim();
-        // Check for allergens on same line
-        const allerMatch = trimmed.match(/\*\*Allergens?:?\*\*\s*(.+)$/i) || cleaned.match(/Allergens?:\s*(.+)$/i);
-        if (allerMatch) currentMeal.allergens = allerMatch[1].trim();
-      } else if (/\*\*allergens?:?\*\*/i.test(trimmed) || /^allergens?:/i.test(cleaned)) {
-        section = 'allergens';
-        currentMeal.allergens = cleaned.replace(/^allergens?:\s*/i, '').trim();
-      } else if (/^daily total:/i.test(cleaned) || /^\*\*daily total:?\*\*/i.test(trimmed)) {
-        section = '';
-      } else if (section === 'ingredients' && cleaned) {
-        currentMeal.ingredients.push(cleaned);
-      } else if (section === 'steps' && cleaned) {
-        currentMeal.steps.push(cleaned);
-      } else if (section === 'healthy' && cleaned && !currentMeal.healthy) {
-        currentMeal.healthy = cleaned.replace(/^Allergens:.*$/i, '').trim();
-      }
-    }
-  }
-  if (currentMeal && (currentMeal.ingredients.length || currentMeal.steps.length)) {
-    meals.push(currentMeal);
-  }
-  return meals;
+      if (cur && (cur.ingredients.length || cur.steps.length)) meals.push(cur);
+      return meals;
     }
 
     function parseShoppingList(text) {
-  const lines = text.split('\n');
-  const categories = [];
-  let currentCategory = null;
-  
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-    const cleaned = trimmed.replace(/\*\*/g, '').replace(/^####\s*/, '').replace(/^###\s*/, '').replace(/:$/, '').trim();
-    
-    // Category heading: #### Protein, ### Fresh Produce, etc.
-    if (/^#{1,4}\s+/i.test(trimmed) || /^(fresh produce|proteins?|dairy|grains|pantry|spices|condiments|breads)/i.test(cleaned)) {
-      const name = cleaned.replace(/^#{1,4}\s*/, '').replace(/:$/, '').trim();
-      const emojis = { 'fresh produce': '🥦', 'produce': '🥦', 'protein': '🍗', 'proteins': '🍗', 'dairy': '🥛', 'grains': '🍞', 'pantry': '🧂', 'spices': '🌿', 'condiments': '🧂', 'breads': '🍞' };
-      const key = Object.keys(emojis).find(k => cleaned.toLowerCase().includes(k));
-      currentCategory = { name, emoji: key ? emojis[key] : '📦', items: [] };
-      categories.push(currentCategory);
-    } else if (currentCategory) {
-      // Remove leading dashes, asterisks, bullet points
-      const item = cleaned.replace(/^[-*•]\s*/, '').replace(/^☐\s*/, '').trim();
-      if (item) currentCategory.items.push(item);
-    }
-  }
-  return categories;
+      const lines = text.split('\n');
+      const cats = []; let cur = null;
+      for (const line of lines) {
+        const t = line.trim(); if (!t) continue;
+        const c = t.replace(/\*\*/g,'').replace(/^####\s*/,'').replace(/^###\s*/,'').replace(/:$/,'').trim();
+        if (/^#{1,4}\s+/i.test(t) || /^(fresh produce|proteins?|dairy|grains|pantry|spices|condiments|breads)/i.test(c)) {
+          const name = c.replace(/^#{1,4}\s*/,'').replace(/:$/,'').trim();
+          const em = {'fresh produce':'🥦','produce':'🥦','protein':'🍗','proteins':'🍗','dairy':'🥛','grains':'🍞','pantry':'🧂','spices':'🌿','condiments':'🧂','breads':'🍞'};
+          const k = Object.keys(em).find(x => c.toLowerCase().includes(x));
+          cur = { name, emoji: k ? em[k] : '📦', items: [] }; cats.push(cur);
+        } else if (cur) {
+          const item = c.replace(/^[-*•]\s*/,'').replace(/^☐\s*/,'').trim();
+          if (item) cur.items.push(item);
+        }
+      }
+      return cats;
     }
 
-    // ─── RENDERERS ────────────────────────────────────────────────────
     function renderMealContent(content) {
       const meals = parseMeals(content);
       if (!meals.length) return '<p style="color:#888;font-size:14px;">No meal data available</p>';
-      
-      return meals.map(meal => {
-        const macroParts = meal.meta ? meal.meta.split('|').map(s => s.trim()) : [];
-        let macrosHTML = '';
-        if (macroParts.length >= 4) {
-          macrosHTML = `
-            <div class="macro-badges">
-              <span class="macro-badge macro-time">⏱️ ${macroParts[0]}</span>
-              <span class="macro-badge macro-diff">🧑‍🍳 ${macroParts[1]}</span>
-              <span class="macro-badge macro-cal">🔥 ${macroParts[2]}</span>
-              <span class="macro-badge macro-macros">${macroParts.slice(3).join(' | ')}</span>
-            </div>`;
-        }
-        
-        const ingHTML = meal.ingredients.length ? `
-          <ul class="ingredient-list">${meal.ingredients.map(i => `<li>• ${i}</li>`).join('')}</ul>` : '';
-        
-        const stepsHTML = meal.steps.length ? `
-          <ol class="step-list">${meal.steps.map(s => `<li>${s.replace(/^\d+\.\s|-\s/, '')}</li>`).join('')}</ol>` : '';
-        
-        const healthyHTML = meal.healthy ? `
-          <div class="healthy-note">💚 <strong>Why it's healthy:</strong> ${meal.healthy}</div>` : '';
-        
-        const allergenHTML = meal.allergens ? `
-          <div class="allergen-box ${meal.allergens.toLowerCase().includes('none') ? 'allergen-safe' : 'allergen-warn'}">
-            ${meal.allergens.toLowerCase().includes('none') ? '✅ No common allergens' : `⚠️ <strong>Allergens:</strong> ${meal.allergens}`}
-          </div>` : '';
-        
-        return `
-          <div class="meal-block">
-            <div class="meal-name">${meal.name}</div>
-            ${macrosHTML}
-            ${ingHTML}
-            ${stepsHTML}
-            ${healthyHTML}
-            ${allergenHTML}
-          </div>`;
+      return meals.map(m => {
+        const mp = m.meta ? m.meta.split('|').map(s=>s.trim()) : [];
+        let mb = '';
+        if (mp.length>=4) mb = `<div class="macro-badges"><span class="macro-badge macro-time">⏱️ ${mp[0]}</span><span class="macro-badge macro-diff">🧑‍🍳 ${mp[1]}</span><span class="macro-badge macro-cal">🔥 ${mp[2]}</span><span class="macro-badge macro-macros">${mp.slice(3).join(' | ')}</span></div>`;
+        const ing = m.ingredients.length ? `<ul class="ingredient-list">${m.ingredients.map(i=>`<li>• ${i}</li>`).join('')}</ul>` : '';
+        const stp = m.steps.length ? `<ol class="step-list">${m.steps.map(s=>`<li>${s.replace(/^\d+\.\s|-\s/,'')}</li>`).join('')}</ol>` : '';
+        const hl = m.healthy ? `<div class="healthy-note">💚 <strong>Why it's healthy:</strong> ${m.healthy}</div>` : '';
+        const al = m.allergens ? `<div class="allergen-box ${m.allergens.toLowerCase().includes('none')?'allergen-safe':'allergen-warn'}">${m.allergens.toLowerCase().includes('none')?'✅ No common allergens':`⚠️ <strong>Allergens:</strong> ${m.allergens}`}</div>` : '';
+        return `<div class="meal-block"><div class="meal-name">${m.name}</div>${mb}${ing}${stp}${hl}${al}</div>`;
       }).join('');
     }
 
     function renderShoppingList(text) {
-      const categories = parseShoppingList(text);
-      if (!categories.length) {
-        // Fallback: render as plain text with checkboxes
-        return text.split('\n').filter(l => l.trim()).map(l => `
-          <div class="shop-item"><span class="shop-checkbox">☐</span> ${l.trim()}</div>
-        `).join('');
-      }
-      
-      return categories.map(cat => `
-        <div class="shop-category">${cat.emoji} ${cat.name}</div>
-        ${cat.items.map(item => `
-          <div class="shop-item"><span class="shop-checkbox">☐</span> ${item}</div>
-        `).join('')}
-      `).join('');
+      const cats = parseShoppingList(text);
+      if (!cats.length) return text.split('\n').filter(l=>l.trim()).map(l=>`<div class="shop-item"><span class="shop-checkbox">☐</span> ${l.trim()}</div>`).join('');
+      return cats.map(c => `<div class="shop-category">${c.emoji} ${c.name}</div>${c.items.map(i=>`<div class="shop-item"><span class="shop-checkbox">☐</span> ${i}</div>`).join('')}`).join('');
     }
 
-    // ─── MAIN RENDER ──────────────────────────────────────────────────
     const app = document.getElementById('app');
 
-    function render() {
-      if (!session) {
-        renderLogin();
-      } else {
-        renderMain();
-      }
-    }
+    function render() { if (!session) renderLogin(); else renderMain(); }
 
     function renderLogin() {
-      app.innerHTML = `
-        <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;">
-          <div style="max-width:440px;width:100%;">
-            <div class="card" style="border-top:4px solid #E76F51;">
-              <div style="text-align:center;margin-bottom:24px;">
-                <img src="${LOGO_URL}" alt="GoodFork" style="max-width:180px;height:auto;margin-bottom:16px;">
-                <img src="${BANNER_URL}" alt="Your weekly meal plan, fresh from the fork" style="width:100%;height:auto;border-radius:12px;margin-bottom:16px;">
-                <h1 style="font-size:22px;font-weight:800;color:#2D6A4F;">Your healthy week<br>starts right here.</h1>
-                <p style="font-size:13px;color:#5a8a72;margin-top:4px;">Sign in to cook up your personalised 7‑day plan.</p>
-              </div>
-              <form id="loginForm">
-                <div class="form-group">
-                  <label class="form-label">Email</label>
-                  <input type="email" id="loginEmail" required class="form-input" placeholder="you@example.com">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Password</label>
-                  <input type="password" id="loginPassword" required class="form-input" placeholder="••••••••">
-                </div>
-                <p id="loginError" style="color:#c0392b;font-size:13px;font-weight:700;display:none;"></p>
-                <button type="submit" id="loginBtn" class="btn btn-primary w-full" style="width:100%;padding:14px;font-size:16px;">🍴 Sign In & Start Cooking</button>
-              </form>
-              <button id="demoBtn" class="btn btn-outline w-full mt-2" style="width:100%;padding:14px;font-size:16px;">👀 Try a Demo</button>
-              <div style="text-align:center;margin-top:16px;">
-                <p style="font-size:12px;color:#888;">No account yet? <a href="${PAYHIP_STORE}" style="color:#E76F51;font-weight:700;">Get your first plan →</a></p>
-              </div>
-            </div>
-            
-            <!-- Plan carousel -->
-            <div style="margin-top:32px;">
-              <h2 style="text-align:center;font-size:18px;font-weight:800;color:#2D6A4F;margin-bottom:16px;">🌿 Pick Your Plan</h2>
-              <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch;">
-                ${renderPlanCard(SINGLE_IMG, 'Single Plan', '1 Meal Plan', '$1.99', 'One-time', false, false)}
-                ${renderPlanCard(MONTHLY_IMG, 'Monthly', '4 Meal Plans', '$4.99', 'Recurring', true, false)}
-                ${renderPlanCard(SEASONAL_IMG, 'Seasonal', '12 Meal Plans', '$9.99', 'Recurring', false, false)}
-                ${renderPlanCard(YEARLY_IMG, 'Yearly', '52 Meal Plans', '$29.99', 'Recurring', false, true)}
-              </div>
-              <p style="font-size:11px;color:#aaa;text-align:center;margin-top:4px;">← Swipe to see all plans →</p>
-            </div>
-          </div>
-          <footer class="disclaimer" style="margin-top:32px;max-width:440px;">⚠️ Disclaimer: The meal plans generated by GoodFork are for informational purposes only and do not replace professional medical or dietary advice. Always consult a qualified healthcare provider.</footer>
-        </div>
-      `;
-
+      app.innerHTML = `<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;"><div style="max-width:440px;width:100%;"><div class="card" style="border-top:4px solid #E76F51;"><div style="text-align:center;margin-bottom:24px;"><img src="${LOGO_URL}" alt="GoodFork" style="max-width:180px;height:auto;margin-bottom:16px;"><img src="${BANNER_URL}" alt="Your weekly meal plan, fresh from the fork" style="width:100%;height:auto;border-radius:12px;margin-bottom:16px;"><h1 style="font-size:22px;font-weight:800;color:#2D6A4F;">Your healthy week<br>starts right here.</h1><p style="font-size:13px;color:#5a8a72;margin-top:4px;">Sign in to cook up your personalised 7‑day plan.</p></div><form id="loginForm"><div class="form-group"><label class="form-label">Email</label><input type="email" id="loginEmail" required class="form-input" placeholder="you@example.com"></div><div class="form-group"><label class="form-label">Password</label><input type="password" id="loginPassword" required class="form-input" placeholder="••••••••"></div><p id="loginError" style="color:#c0392b;font-size:13px;font-weight:700;display:none;"></p><button type="submit" id="loginBtn" class="btn btn-primary w-full" style="width:100%;padding:14px;font-size:16px;">🍴 Sign In & Start Cooking</button></form><button id="demoBtn" class="btn btn-outline w-full mt-2" style="width:100%;padding:14px;font-size:16px;">👀 Try a Demo</button><div style="text-align:center;margin-top:16px;"><p style="font-size:12px;color:#888;">No account yet? <a href="${PAYHIP_STORE}" style="color:#E76F51;font-weight:700;">Get your first plan →</a></p></div></div><div style="margin-top:32px;"><h2 style="text-align:center;font-size:18px;font-weight:800;color:#2D6A4F;margin-bottom:16px;">🌿 Pick Your Plan</h2><div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch;">${renderPlanCard(SINGLE_IMG,'Single Plan','1 Meal Plan','$1.99','One-time',false,false)}${renderPlanCard(MONTHLY_IMG,'Monthly','4 Meal Plans','$4.99','Recurring',true,false)}${renderPlanCard(SEASONAL_IMG,'Seasonal','12 Meal Plans','$9.99','Recurring',false,false)}${renderPlanCard(YEARLY_IMG,'Yearly','52 Meal Plans','$29.99','Recurring',false,true)}</div><p style="font-size:11px;color:#aaa;text-align:center;margin-top:4px;">← Swipe to see all plans →</p></div></div><footer class="disclaimer" style="margin-top:32px;max-width:440px;">⚠️ Disclaimer: The meal plans generated by GoodFork are for informational purposes only and do not replace professional medical or dietary advice. Always consult a qualified healthcare provider.</footer></div>`;
       document.getElementById('loginForm').addEventListener('submit', handleLogin);
       document.getElementById('demoBtn').addEventListener('click', startDemo);
     }
@@ -457,319 +238,84 @@
       let badge = '';
       if (popular) badge = '<span style="position:absolute;top:8px;right:8px;background:linear-gradient(135deg,#f97316,#ef4444);color:white;font-size:10px;font-weight:800;padding:4px 10px;border-radius:20px;">Most Popular</span>';
       if (bestValue) badge = '<span style="position:absolute;top:8px;right:8px;background:#22c55e;color:white;font-size:10px;font-weight:800;padding:4px 10px;border-radius:20px;">Best Value</span>';
-      
-      return `
-        <div style="flex-shrink:0;width:200px;background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);position:relative;border-bottom:6px solid #2D6A4F;">
-          ${badge}
-          <img src="${img}" alt="${title}" style="width:100%;height:120px;object-fit:cover;" onerror="this.style.display='none'">
-          <div style="padding:16px;">
-            <h3 style="font-size:15px;font-weight:800;color:#2D6A4F;">${title}</h3>
-            <p style="font-size:11px;color:#888;">${desc}</p>
-            <p style="font-size:22px;font-weight:800;color:#E76F51;margin:8px 0;">${price}<span style="font-size:12px;color:#888;">${period ? '/'+period : ''}</span></p>
-            <a href="${PAYHIP_STORE}" class="btn btn-primary" style="width:100%;text-align:center;font-size:12px;">${title}</a>
-          </div>
-        </div>`;
+      return `<div style="flex-shrink:0;width:200px;background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);position:relative;border-bottom:6px solid #2D6A4F;">${badge}<img src="${img}" alt="${title}" style="width:100%;height:120px;object-fit:cover;" onerror="this.style.display='none'"><div style="padding:16px;"><h3 style="font-size:15px;font-weight:800;color:#2D6A4F;">${title}</h3><p style="font-size:11px;color:#888;">${desc}</p><p style="font-size:22px;font-weight:800;color:#E76F51;margin:8px 0;">${price}<span style="font-size:12px;color:#888;">${period?'/'+period:''}</span></p><a href="${PAYHIP_STORE}" class="btn btn-primary" style="width:100%;text-align:center;font-size:12px;">${title}</a></div></div>`;
     }
 
     function startDemo() {
-      session = {
-        email: 'demo@goodfork.app',
-        remaining: 99,
-        max: 99,
-        seasonal: true,
-        demo: true,
-        sessionId: genSessionId(),
-      };
-      saveSession(session);
-      planPaid = false;
-      mealPlanText = '';
-      shoppingText = '';
-      allergenText = '';
-      render();
+      session = { email:'demo@goodfork.app', remaining:99, max:99, seasonal:true, demo:true, sessionId:genSessionId() };
+      saveSession(session); planPaid = false; mealPlanText = ''; shoppingText = ''; allergenText = ''; render();
     }
 
     async function handleLogin(e) {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value;
       const password = document.getElementById('loginPassword').value;
-      const errorEl = document.getElementById('loginError');
+      const er = document.getElementById('loginError');
       const btn = document.getElementById('loginBtn');
-      
-      errorEl.style.display = 'none';
-      btn.disabled = true;
-      btn.textContent = 'Signing in...';
-
+      er.style.display = 'none'; btn.disabled = true; btn.textContent = 'Signing in...';
       try {
-        const controller = new AbortController();
-        setTimeout(() => controller.abort(), 25000);
-        const res = await fetch(`${BACKEND}/api/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-          signal: controller.signal,
-        });
-        const data = await res.json();
-        if (!res.ok || data.error) {
-          errorEl.textContent = data.error || 'Invalid email or password';
-          errorEl.style.display = 'block';
-        } else {
-          session = {
-            email,
-            remaining: data.remaining ?? 0,
-            max: data.max ?? 0,
-            seasonal: data.seasonal ?? false,
-            demo: false,
-            sessionId: genSessionId(),
-          };
-          saveSession(session);
-          planPaid = false;
-          mealPlanText = '';
-          shoppingText = '';
-          allergenText = '';
-          render();
+        const c = new AbortController(); setTimeout(()=>c.abort(),25000);
+        const r = await fetch(`${BACKEND}/api/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password}),signal:c.signal});
+        const d = await r.json();
+        if (!r.ok||d.error) { er.textContent = d.error||'Invalid email or password'; er.style.display='block'; }
+        else {
+          session = { email, remaining:d.remaining??0, max:d.max??0, seasonal:d.seasonal??false, demo:false, sessionId:genSessionId() };
+          saveSession(session); planPaid=false; mealPlanText=''; shoppingText=''; allergenText=''; render();
         }
-      } catch (err) {
-        errorEl.textContent = err.name === 'AbortError' ? 'Server taking too long. Try again.' : 'Cannot reach server. Check your connection.';
-        errorEl.style.display = 'block';
-      } finally {
-        btn.disabled = false;
-        btn.textContent = '🍴 Sign In & Start Cooking';
-      }
+      } catch(err) {
+        er.textContent = err.name==='AbortError'?'Server taking too long. Try again.':'Cannot reach server. Check your connection.';
+        er.style.display='block';
+      } finally { btn.disabled=false; btn.textContent='🍴 Sign In & Start Cooking'; }
     }
 
     function renderMain() {
       const seasonLabel = session.seasonal ? getSeason('South Africa') : null;
       const canGenerate = session.remaining > 0 && !generating;
       const isLocked = !planPaid && !session.demo;
-
-      app.innerHTML = `
-        <div style="min-height:100vh;display:flex;flex-direction:column;">
-          <!-- Header -->
-          <header class="header">
-            <div class="header-inner">
-              <img src="${LOGO_URL}" alt="GoodFork" class="header-logo">
-              <div class="header-badges">
-                ${session.demo ? '<span class="badge badge-demo">🔒 Demo</span>' : ''}
-                <span class="badge-plans">🔑 Plans: ${session.demo ? '99' : session.remaining} / ${session.max}</span>
-                ${seasonLabel ? `<span class="badge-season">${seasonLabel}</span>` : ''}
-                <button class="btn btn-outline btn-sm" id="logoutBtn">Log Out</button>
-              </div>
-            </div>
-          </header>
-
-          <!-- Main -->
-          <main style="flex:1;padding:24px 16px;">
-            <div class="container">
-              ${session.demo ? `
-                <div style="background:#fffbcc;border:1px solid #f0e040;border-radius:12px;padding:12px 16px;margin-bottom:24px;font-size:13px;font-weight:700;color:#7a6000;text-align:center;">
-                  🔒 Demo Mode — <a href="${PAYHIP_STORE}" style="text-decoration:underline;font-weight:800;">purchase a plan</a> to unlock copy & print
-                </div>` : ''}
-              
-              ${!mealPlanText && !generating ? `
-                <!-- Generation Form -->
-                <div class="card card-left-border">
-                  <h2 style="font-size:20px;font-weight:800;color:#2D6A4F;margin-bottom:20px;">🌍 Generate Your Meal Plan</h2>
-                  <div id="genForm">
-                    <div class="form-group">
-                      <label class="form-label">Country</label>
-                      <select id="countrySelect" class="form-select">
-                        <option>South Africa</option><option>India</option><option>Nigeria</option><option>Kenya</option>
-                        <option>United Kingdom</option><option>United States</option><option>Canada</option><option>Australia</option>
-                        <option>Mexico</option><option>Japan</option><option>Other</option>
-                      </select>
-                      <input type="text" id="otherCountry" class="form-input mt-2 hidden" placeholder="Enter country name">
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label">Age Group</label>
-                      <select id="ageSelect" class="form-select">
-                        <option>Infant (6-12 months)</option><option>Toddler (1-3 years)</option>
-                        <option>Preschooler (4-6 years)</option><option>Child (7-12 years)</option>
-                        <option>Teen (13-17 years)</option><option>Adult (18-59 years)</option><option>Senior (60+ years)</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label">Dietary Preferences</label>
-                      <div class="diet-pills" id="dietPills">
-                        <button class="diet-pill" data-val="Vegetarian">🥕 Vegetarian</button>
-                        <button class="diet-pill" data-val="Vegan">🌱 Vegan</button>
-                        <button class="diet-pill" data-val="Halal">🕌 Halal</button>
-                        <button class="diet-pill" data-val="Dairy-free">🥛 Dairy-free</button>
-                        <button class="diet-pill" data-val="Gluten-free">🌾 Gluten-free</button>
-                        <button class="diet-pill" data-val="Nut-free">🥜 Nut-free</button>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label">Allergies & Restrictions</label>
-                      <input type="text" id="extraInput" class="form-input" placeholder="e.g., peanuts, shellfish, gluten">
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label">👥 Number of People</label>
-                      <select id="peopleSelect" class="form-select">
-                        <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
-                      </select>
-                    </div>
-                    <button id="genBtn" class="btn btn-primary w-full" style="width:100%;padding:14px;font-size:16px;" ${canGenerate ? '' : 'disabled'}>
-                      🍴 Generate My Meal Plan
-                    </button>
-                  </div>
-                </div>
-              ` : ''}
-
-              ${generating ? `
-                <div class="card" style="text-align:center;padding:40px 20px;">
-                  <span class="pulse-emoji">🍽️</span>
-                  <p id="genProgress" style="font-weight:700;color:#2D6A4F;margin-bottom:16px;">🍽️ Cooking up your healthy week...</p>
-                  <div class="progress-bar"><div class="progress-fill"></div></div>
-                  <p id="genLongWait" style="font-size:12px;color:#E76F51;margin-top:16px;display:none;">⏱️ This is taking longer than usual. Great meals take time!</p>
-                  <button id="cancelGenBtn" class="btn btn-outline mt-4" style="color:#c0392b;border-color:#c0392b;">✕ Cancel</button>
-                </div>
-              ` : ''}
-
-              <div id="genError" style="display:none;background:#fde8e8;color:#c0392b;padding:12px 16px;border-radius:12px;margin-bottom:16px;font-weight:700;"></div>
-
-              ${mealPlanText && !generating ? `
-                <!-- Action Buttons -->
-                <div class="flex gap-3 flex-wrap mb-6 no-print">
-                  <button id="copyBtn" class="btn btn-primary">${isLocked ? '🔒' : '📋'} Copy Full Plan</button>
-                  <button id="printBtn" class="btn btn-primary">${isLocked ? '🔒' : '🖨️'} Print / Save as PDF</button>
-                  <span id="copiedMsg" style="display:none;color:#2D6A4F;font-weight:700;align-self:center;">✅ Copied!</span>
-                </div>
-
-                <!-- Allergen Summary -->
-                ${allergenText ? `
-                  <div style="background:#fffbcc;border:1px solid #f0e040;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;font-weight:700;color:#7a6000;">
-                    ⚠️ <strong>Allergens Detected:</strong> ${allergenText}
-                  </div>` : ''}
-
-                <!-- Day Cards -->
-                <div id="dayCards"></div>
-
-                <!-- Shopping List -->
-                ${shoppingText ? `
-                  <div class="card card-green">
-                    <h2 style="font-size:22px;font-weight:800;color:#2D6A4F;margin-bottom:16px;">🛒 Shopping List</h2>
-                    <div id="shopList"></div>
-                  </div>` : ''}
-              ` : ''}
-            </div>
-          </main>
-
-          <!-- Disclaimer -->
-          <footer class="disclaimer">
-            ⚠️ Disclaimer: The meal plans generated by GoodFork are for informational purposes only and do not replace professional medical or dietary advice. Always consult a qualified healthcare provider, especially if you have allergies or medical conditions.
-          </footer>
-        </div>
-
-        <!-- Payment Modal -->
-        <div id="payModal" class="modal-overlay hidden">
-          <div class="modal">
-            <h3 style="font-size:18px;font-weight:800;color:#2D6A4F;margin-bottom:12px;">🔓 Unlock Copy & Print</h3>
-            <p style="font-size:14px;color:#555;margin-bottom:16px;">Purchase a single meal plan for <strong>$1.99</strong> to unlock copying and printing.</p>
-            <p id="payMsg" style="font-size:13px;color:#c0392b;font-weight:700;margin-bottom:16px;display:none;"></p>
-            <div class="flex gap-3">
-              <button id="payNowBtn" class="btn btn-primary" style="flex:1;">💳 Pay Now</button>
-              <button id="cancelPayBtn" class="btn btn-outline" style="flex:1;border-color:#d4e8d4;">Cancel</button>
-            </div>
-          </div>
-        </div>
-      `;
-
-      // Wire up events
-      if (!mealPlanText && !generating) {
-        wireGenForm();
-      }
+      app.innerHTML = `<div style="min-height:100vh;display:flex;flex-direction:column;"><header class="header"><div class="header-inner"><img src="${LOGO_URL}" alt="GoodFork" class="header-logo"><div class="header-badges">${session.demo?'<span class="badge badge-demo">🔒 Demo</span>':''}<span class="badge-plans">🔑 Plans: ${session.demo?'99':session.remaining} / ${session.max}</span>${seasonLabel?`<span class="badge-season">${seasonLabel}</span>`:''}<button class="btn btn-outline btn-sm" id="logoutBtn">Log Out</button></div></div></header><main style="flex:1;padding:24px 16px;"><div class="container">${session.demo?`<div style="background:#fffbcc;border:1px solid #f0e040;border-radius:12px;padding:12px 16px;margin-bottom:24px;font-size:13px;font-weight:700;color:#7a6000;text-align:center;">🔒 Demo Mode — <a href="${PAYHIP_STORE}" style="text-decoration:underline;font-weight:800;">purchase a plan</a> to unlock copy & print</div>`:''}${!mealPlanText&&!generating?`<div class="card card-left-border"><h2 style="font-size:20px;font-weight:800;color:#2D6A4F;margin-bottom:20px;">🌍 Generate Your Meal Plan</h2><div id="genForm"><div class="form-group"><label class="form-label">Country</label><select id="countrySelect" class="form-select"><option>South Africa</option><option>India</option><option>Nigeria</option><option>Kenya</option><option>United Kingdom</option><option>United States</option><option>Canada</option><option>Australia</option><option>Mexico</option><option>Japan</option><option>Other</option></select><input type="text" id="otherCountry" class="form-input mt-2 hidden" placeholder="Enter country name"></div><div class="form-group"><label class="form-label">Age Group</label><select id="ageSelect" class="form-select"><option>Infant (6-12 months)</option><option>Toddler (1-3 years)</option><option>Preschooler (4-6 years)</option><option>Child (7-12 years)</option><option>Teen (13-17 years)</option><option>Adult (18-59 years)</option><option>Senior (60+ years)</option></select></div><div class="form-group"><label class="form-label">Dietary Preferences</label><div class="diet-pills" id="dietPills"><button class="diet-pill" data-val="Vegetarian">🥕 Vegetarian</button><button class="diet-pill" data-val="Vegan">🌱 Vegan</button><button class="diet-pill" data-val="Halal">🕌 Halal</button><button class="diet-pill" data-val="Dairy-free">🥛 Dairy-free</button><button class="diet-pill" data-val="Gluten-free">🌾 Gluten-free</button><button class="diet-pill" data-val="Nut-free">🥜 Nut-free</button></div></div><div class="form-group"><label class="form-label">Allergies & Restrictions</label><input type="text" id="extraInput" class="form-input" placeholder="e.g., peanuts, shellfish, gluten"></div><div class="form-group"><label class="form-label">👥 Number of People</label><select id="peopleSelect" class="form-select"><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option></select></div><button id="genBtn" class="btn btn-primary w-full" style="width:100%;padding:14px;font-size:16px;" ${canGenerate?'':'disabled'}>🍴 Generate My Meal Plan</button></div></div>`:''}${generating?`<div class="card" style="text-align:center;padding:40px 20px;"><span class="pulse-emoji">🍽️</span><p id="genProgress" style="font-weight:700;color:#2D6A4F;margin-bottom:16px;">🍽️ Cooking up your healthy week...</p><div class="progress-bar"><div class="progress-fill"></div></div><p id="genLongWait" style="font-size:12px;color:#E76F51;margin-top:16px;display:none;">⏱️ This is taking longer than usual. Great meals take time!</p><button id="cancelGenBtn" class="btn btn-outline mt-4" style="color:#c0392b;border-color:#c0392b;">✕ Cancel</button></div>`:''}<div id="genError" style="display:none;background:#fde8e8;color:#c0392b;padding:12px 16px;border-radius:12px;margin-bottom:16px;font-weight:700;"></div>${mealPlanText&&!generating?`<div class="flex gap-3 flex-wrap mb-6 no-print"><button id="copyBtn" class="btn btn-primary">${isLocked?'🔒':'📋'} Copy Full Plan</button><button id="printBtn" class="btn btn-primary">${isLocked?'🔒':'🖨️'} Print / Save as PDF</button><span id="copiedMsg" style="display:none;color:#2D6A4F;font-weight:700;align-self:center;">✅ Copied!</span></div>${allergenText?`<div style="background:#fffbcc;border:1px solid #f0e040;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;font-weight:700;color:#7a6000;">⚠️ <strong>Allergens Detected:</strong> ${allergenText}</div>`:''}<div id="dayCards"></div>${shoppingText?`<div class="card card-green"><h2 style="font-size:22px;font-weight:800;color:#2D6A4F;margin-bottom:16px;">🛒 Shopping List</h2><div id="shopList"></div></div>`:''}`:''}</div></main><footer class="disclaimer">⚠️ Disclaimer: The meal plans generated by GoodFork are for informational purposes only and do not replace professional medical or dietary advice. Always consult a qualified healthcare provider, especially if you have allergies or medical conditions.</footer></div><div id="payModal" class="modal-overlay hidden"><div class="modal"><h3 style="font-size:18px;font-weight:800;color:#2D6A4F;margin-bottom:12px;">🔓 Unlock Copy & Print</h3><p style="font-size:14px;color:#555;margin-bottom:16px;">Purchase a single meal plan for <strong>$1.99</strong> to unlock copying and printing.</p><p id="payMsg" style="font-size:13px;color:#c0392b;font-weight:700;margin-bottom:16px;display:none;"></p><div class="flex gap-3"><button id="payNowBtn" class="btn btn-primary" style="flex:1;">💳 Pay Now</button><button id="cancelPayBtn" class="btn btn-outline" style="flex:1;border-color:#d4e8d4;">Cancel</button></div></div></div>`;
+      if (!mealPlanText && !generating) wireGenForm();
       if (generating) {
         document.getElementById('cancelGenBtn').addEventListener('click', cancelGenerate);
-        // Long wait message
-        setTimeout(() => {
-          const el = document.getElementById('genLongWait');
-          if (el) el.style.display = 'block';
-        }, 60000);
-        // Progress messages
-        const msgs = ['🍽️ Cooking up your healthy week...','🥗 Selecting fresh, seasonal ingredients...','🍳 Preparing your recipes with care...','📋 Writing your shopping list...','✨ Adding the final touches...'];
-        let idx = 0;
-        const interval = setInterval(() => {
-          const el = document.getElementById('genProgress');
-          if (el) { el.textContent = msgs[idx % msgs.length]; idx++; }
-          else clearInterval(interval);
-        }, 8000);
+        setTimeout(()=>{const el=document.getElementById('genLongWait');if(el)el.style.display='block';},60000);
+        const msgs=['🍽️ Cooking up your healthy week...','🥗 Selecting fresh, seasonal ingredients...','🍳 Preparing your recipes with care...','📋 Writing your shopping list...','✨ Adding the final touches...'];
+        let idx=0; const iv=setInterval(()=>{const el=document.getElementById('genProgress');if(el){el.textContent=msgs[idx%msgs.length];idx++;}else clearInterval(iv);},8000);
       }
       if (mealPlanText && !generating) {
         document.getElementById('copyBtn').addEventListener('click', handleCopy);
         document.getElementById('printBtn').addEventListener('click', handlePrint);
-        renderDayCards();
-        if (shoppingText) renderShopList();
+        document.getElementById('dayCards').innerHTML = (()=>{
+          const days=parseDays(mealPlanText);
+          if(!days.length) return `<div class="card card-left-border"><pre style="white-space:pre-wrap;font-size:14px;">${mealPlanText}</pre></div>`;
+          return days.map(({day,content})=>`<div class="card card-left-border day-card"><h3 class="day-heading">📅 ${day}</h3>${renderMealContent(content)}</div>`).join('');
+        })();
+        if(shoppingText) document.getElementById('shopList').innerHTML = renderShoppingList(shoppingText);
       }
-      document.getElementById('logoutBtn').addEventListener('click', () => {
-        clearSession();
-        session = null;
-        planPaid = false;
-        mealPlanText = '';
-        shoppingText = '';
-        allergenText = '';
-        render();
-      });
+      document.getElementById('logoutBtn').addEventListener('click',()=>{clearSession();session=null;planPaid=false;mealPlanText='';shoppingText='';allergenText='';render();});
       document.getElementById('payNowBtn').addEventListener('click', startPayment);
       document.getElementById('cancelPayBtn').addEventListener('click', closePayModal);
     }
 
     function wireGenForm() {
-      const dietary = [];
-      document.querySelectorAll('#dietPills .diet-pill').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const val = btn.dataset.val;
-          if (dietary.includes(val)) dietary.splice(dietary.indexOf(val), 1);
-          else dietary.push(val);
-          btn.classList.toggle('active');
-        });
-      });
-      document.getElementById('countrySelect').addEventListener('change', function() {
-        document.getElementById('otherCountry').classList.toggle('hidden', this.value !== 'Other');
-      });
-      document.getElementById('genBtn').addEventListener('click', () => handleGenerate(dietary));
+      const dietary=[];
+      document.querySelectorAll('#dietPills .diet-pill').forEach(b=>{b.addEventListener('click',()=>{const v=b.dataset.val;if(dietary.includes(v))dietary.splice(dietary.indexOf(v),1);else dietary.push(v);b.classList.toggle('active');});});
+      document.getElementById('countrySelect').addEventListener('change',function(){document.getElementById('otherCountry').classList.toggle('hidden',this.value!=='Other');});
+      document.getElementById('genBtn').addEventListener('click',()=>handleGenerate(dietary));
     }
 
     async function handleGenerate(dietary) {
-      const country = document.getElementById('countrySelect').value;
-      const otherCountry = document.getElementById('otherCountry').value;
-      const ageGroup = document.getElementById('ageSelect').value;
-      const extraRestrictions = document.getElementById('extraInput').value;
-      const people = document.getElementById('peopleSelect').value;
-
-      generating = true;
-      genAbortController = new AbortController();
-      render();
-
+      const country=document.getElementById('countrySelect').value;
+      const otherCountry=document.getElementById('otherCountry').value;
+      const ageGroup=document.getElementById('ageSelect').value;
+      const extraRestrictions=document.getElementById('extraInput').value;
+      const people=document.getElementById('peopleSelect').value;
+      generating=true; genAbortController=new AbortController(); render();
       try {
-        setTimeout(() => genAbortController.abort(), 90000);
-        const res = await fetch(`${BACKEND}/api/generate-mealplan`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            country: country === 'Other' ? otherCountry : country,
-            ageGroup,
-            dietaryFilters: dietary.join(', '),
-            extraRestrictions,
-            email: session.email,
-            people,
-          }),
-          signal: genAbortController.signal,
-        });
-        const data = await res.json();
-        if (!res.ok || data.error) {
-          setGenError(data.error || 'Something went wrong. Please try again.');
-          generating = false;
-          render();
-        } else {
-         const fullText = data.mealPlan || '';
-        // Split shopping list from meal plan
-        const shopMarker = '=== Shopping List ===';
-        const shopIndex = fullText.indexOf(shopMarker);
-        if (shopIndex > -1) {
-        mealPlanText = fullText.substring(0, shopIndex).trim();
-        shoppingText = fullText.substring(shopIndex).trim();
-         } else {
-          const fullText = data.mealPlan || '';
+        setTimeout(()=>genAbortController.abort(),90000);
+        const r=await fetch(`${BACKEND}/api/generate-mealplan`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({country:country==='Other'?otherCountry:country,ageGroup,dietaryFilters:dietary.join(', '),extraRestrictions,email:session.email,people}),signal:genAbortController.signal});
+        const d=await r.json();
+        if(!r.ok||d.error){setGenError(d.error||'Something went wrong.');generating=false;render();}
+        else {
+          const fullText = d.mealPlan || '';
           const shopMarker = '### Shopping List';
           const shopIndex = fullText.indexOf(shopMarker);
           if (shopIndex > -1) {
@@ -779,130 +325,36 @@
             mealPlanText = fullText;
             shoppingText = '';
           }
-          allergenText = data.allergens || '';
-          if (!session.demo && data.remaining !== undefined) {
-            session.remaining = data.remaining;
-            saveSession(session);
-          }
-          generating = false;
-          render();
+          allergenText = d.allergens || '';
+          if(!session.demo&&d.remaining!==undefined){session.remaining=d.remaining;saveSession(session);}
+          generating=false;render();
         }
-      } catch (err) {
-        generating = false;
-        if (err.name !== 'AbortError') {
-          setGenError('Cannot reach server. Check your connection.');
-        }
-        render();
-      }
-
-    function cancelGenerate() {
-      if (genAbortController) genAbortController.abort();
-      generating = false;
-      render();
+      } catch(err){generating=false;if(err.name!=='AbortError')setGenError('Cannot reach server.');render();}
     }
 
-    function setGenError(msg) {
-      // Will be shown on next render
-      const el = document.getElementById('genError');
-      if (el) { el.textContent = '❌ ' + msg; el.style.display = 'block'; }
+    function cancelGenerate(){if(genAbortController)genAbortController.abort();generating=false;render();}
+    function setGenError(msg){const el=document.getElementById('genError');if(el){el.textContent='❌ '+msg;el.style.display='block';}}
+
+    function handleCopy(){if(!planPaid&&!session.demo){showPayModal();return;}const text=`${mealPlanText}\n\n${shoppingText}\n\nDisclaimer: The meal plans generated by GoodFork are for informational purposes only and do not replace professional medical or dietary advice.`;navigator.clipboard.writeText(text).then(()=>{const m=document.getElementById('copiedMsg');if(m){m.style.display='inline';setTimeout(()=>m.style.display='none',2000);}});}
+    function handlePrint(){if(!planPaid&&!session.demo){showPayModal();return;}window.print();}
+    function showPayModal(){document.getElementById('payModal').classList.remove('hidden');}
+    function closePayModal(){document.getElementById('payModal').classList.add('hidden');document.getElementById('payMsg').style.display='none';}
+
+    let payPollInterval=null;
+    function startPayment(){
+      const sid=genSessionId();localStorage.setItem(`gf_plan_${sid}`,JSON.stringify({mealPlanText,shoppingText}));
+      const url=`https://payhip.com/b/${PAYHIP_SINGLE_ID}/checkout?custom=${sid}`;
+      const popup=window.open(url,'payhip-popup','width=500,height=700');
+      document.getElementById('payNowBtn').disabled=true;document.getElementById('payNowBtn').textContent='⏳ Processing...';
+      let elapsed=0;
+      payPollInterval=setInterval(async()=>{elapsed+=2;
+        if(popup&&popup.closed&&elapsed>4){clearInterval(payPollInterval);document.getElementById('payMsg').textContent='Payment not detected. If you completed payment, refresh the page.';document.getElementById('payMsg').style.display='block';document.getElementById('payNowBtn').disabled=false;document.getElementById('payNowBtn').textContent='💳 Pay Now';return;}
+        if(elapsed>=300){clearInterval(payPollInterval);document.getElementById('payMsg').textContent='Payment not detected. If you completed payment, refresh the page.';document.getElementById('payMsg').style.display='block';document.getElementById('payNowBtn').disabled=false;document.getElementById('payNowBtn').textContent='💳 Pay Now';return;}
+        try{const r=await fetch(`${BACKEND}/api/check-payment?session=${sid}`);const d=await r.json();if(d.paid===true){clearInterval(payPollInterval);localStorage.setItem(`planPaid_${sid}`,'1');planPaid=true;closePayModal();if(popup&&!popup.closed)popup.close();render();}}catch(e){}},2000);
     }
 
-    function renderDayCards() {
-      const container = document.getElementById('dayCards');
-      if (!container) return;
-      const days = parseDays(mealPlanText);
-      if (!days.length) {
-        container.innerHTML = `<div class="card card-left-border"><pre style="white-space:pre-wrap;font-size:14px;">${mealPlanText}</pre></div>`;
-        return;
-      }
-      container.innerHTML = days.map(({ day, content }) => `
-        <div class="card card-left-border day-card">
-          <h3 class="day-heading">📅 ${day}</h3>
-          ${renderMealContent(content)}
-        </div>
-      `).join('');
-    }
-
-    function renderShopList() {
-      const container = document.getElementById('shopList');
-      if (!container) return;
-      container.innerHTML = renderShoppingList(shoppingText);
-    }
-
-    function handleCopy() {
-      if (!planPaid && !session.demo) { showPayModal(); return; }
-      const text = `${mealPlanText}\n\n${shoppingText}\n\nDisclaimer: The meal plans generated by GoodFork are for informational purposes only and do not replace professional medical or dietary advice.`;
-      navigator.clipboard.writeText(text).then(() => {
-        const msg = document.getElementById('copiedMsg');
-        if (msg) { msg.style.display = 'inline'; setTimeout(() => msg.style.display = 'none', 2000); }
-      });
-    }
-
-    function handlePrint() {
-      if (!planPaid && !session.demo) { showPayModal(); return; }
-      window.print();
-    }
-
-    function showPayModal() {
-      document.getElementById('payModal').classList.remove('hidden');
-    }
-
-    function closePayModal() {
-      document.getElementById('payModal').classList.add('hidden');
-      document.getElementById('payMsg').style.display = 'none';
-    }
-
-    let payPollInterval = null;
-    function startPayment() {
-      const sid = genSessionId();
-      localStorage.setItem(`gf_plan_${sid}`, JSON.stringify({ mealPlanText, shoppingText }));
-      const url = `https://payhip.com/b/${PAYHIP_SINGLE_ID}/checkout?custom=${sid}`;
-      const popup = window.open(url, 'payhip-popup', 'width=500,height=700');
-      
-      document.getElementById('payNowBtn').disabled = true;
-      document.getElementById('payNowBtn').textContent = '⏳ Processing...';
-      
-      let elapsed = 0;
-      payPollInterval = setInterval(async () => {
-        elapsed += 2;
-        if (popup && popup.closed && elapsed > 4) {
-          clearInterval(payPollInterval);
-          document.getElementById('payMsg').textContent = 'Payment not detected. If you completed payment, refresh the page.';
-          document.getElementById('payMsg').style.display = 'block';
-          document.getElementById('payNowBtn').disabled = false;
-          document.getElementById('payNowBtn').textContent = '💳 Pay Now';
-          return;
-        }
-        if (elapsed >= 300) {
-          clearInterval(payPollInterval);
-          document.getElementById('payMsg').textContent = 'Payment not detected. If you completed payment, refresh the page.';
-          document.getElementById('payMsg').style.display = 'block';
-          document.getElementById('payNowBtn').disabled = false;
-          document.getElementById('payNowBtn').textContent = '💳 Pay Now';
-          return;
-        }
-        try {
-          const res = await fetch(`${BACKEND}/api/check-payment?session=${sid}`);
-          const data = await res.json();
-          if (data.paid === true) {
-            clearInterval(payPollInterval);
-            localStorage.setItem(`planPaid_${sid}`, '1');
-            planPaid = true;
-            closePayModal();
-            if (popup && !popup.closed) popup.close();
-            render();
-          }
-        } catch(e) { /* keep polling */ }
-      }, 2000);
-    }
-
-    // ─── INIT ──────────────────────────────────────────────────────────
-    const saved = loadSession();
-    if (saved) {
-      session = saved;
-      const paid = localStorage.getItem(`planPaid_${saved.sessionId}`);
-      if (paid) planPaid = true;
-    }
+    const saved=loadSession();
+    if(saved){session=saved;const paid=localStorage.getItem(`planPaid_${saved.sessionId}`);if(paid)planPaid=true;}
     render();
   </script>
 </body>
