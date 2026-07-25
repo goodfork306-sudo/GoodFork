@@ -165,7 +165,13 @@
             if (em) { end = em.index; break; }
           }
         }
-        result.push({ day: d, content: text.slice(start, end).trim() });
+                let dayContent = text.slice(start, end).trim();
+        // Remove daily total line and shopping list markers from day content
+        dayContent = dayContent.replace(/\*\*Daily total:.*$/gim, '');
+        dayContent = dayContent.replace(/###\s*\*?\*?\s*Weekly Shopping List.*$/gim, '');
+        dayContent = dayContent.replace(/###\s*\*?\*?\s*Shopping List.*$/gim, '');
+        dayContent = dayContent.trim();
+        result.push({ day: d, content: dayContent });
       }
       return result;
     }
@@ -382,8 +388,12 @@
         if(!r.ok||d.error){setGenError(d.error||'Something went wrong.');generating=false;render();}
         else {
           const fullText = d.mealPlan || '';
-          const shopMarker = '### Shopping List';
-          const shopIndex = fullText.indexOf(shopMarker);
+          const shopMarkers = ['### **Weekly Shopping List**', '### Weekly Shopping List', '### **Shopping List**', '### Shopping List', '=== Shopping List', '## Shopping List', '🛒 Shopping List'];
+          let shopIndex = -1;
+          for (const m of shopMarkers) {
+            shopIndex = fullText.indexOf(m);
+            if (shopIndex > -1) break;
+          }
           if (shopIndex > -1) {
             mealPlanText = fullText.substring(0, shopIndex).trim();
             shoppingText = fullText.substring(shopIndex).trim();
