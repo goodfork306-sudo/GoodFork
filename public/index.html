@@ -11,13 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Nunito', system-ui, -apple-system, sans-serif;
-      background: #FFF9E6;
-      color: #333;
-      line-height: 1.6;
-      min-height: 100vh;
-    }
+    body { font-family: 'Nunito', system-ui, -apple-system, sans-serif; background: #FFF9E6; color: #333; line-height: 1.6; min-height: 100vh; }
     .container { max-width: 800px; margin: 0 auto; padding: 0 16px; }
     .header { background: white; border-bottom: 1px solid #e0d8c0; position: sticky; top: 0; z-index: 40; padding: 12px 0; }
     .header-inner { max-width: 800px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
@@ -69,32 +63,17 @@
     .daily-total { text-align: center; font-weight: 800; color: #2D6A4F; padding: 12px 0; font-size: 15px; }
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; }
     .modal { background: white; border-radius: 16px; padding: 24px; max-width: 400px; width: 100%; }
-    .progress-container { text-align: center; padding: 40px 20px; }
     .pulse-emoji { font-size: 60px; animation: pulse 1.5s ease-in-out infinite; display: block; margin-bottom: 20px; }
     @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
     .progress-bar { width: 100%; height: 8px; background: #E8E8E8; border-radius: 4px; overflow: hidden; margin: 16px 0; }
     .progress-fill { height: 100%; background: #2D6A4F; border-radius: 4px; animation: fillBar 30s ease-out forwards; }
     @keyframes fillBar { 0% { width: 0%; } 100% { width: 90%; } }
     .disclaimer { background: #f5f0e0; border-top: 1px solid #e0d8c0; padding: 14px 16px; font-size: 11px; color: #888; text-align: center; margin-top: auto; }
-    .text-center { text-align: center; }
-    .mt-1 { margin-top: 4px; } .mt-2 { margin-top: 8px; } .mt-4 { margin-top: 16px; } .mt-6 { margin-top: 24px; } .mt-8 { margin-top: 32px; }
-    .mb-2 { margin-bottom: 8px; } .mb-4 { margin-bottom: 16px; } .mb-6 { margin-bottom: 24px; }
     .hidden { display: none !important; }
-    .flex { display: flex; } .flex-wrap { flex-wrap: wrap; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; } .gap-4 { gap: 16px; }
+    .flex { display: flex; } .flex-wrap { flex-wrap: wrap; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; }
     .w-full { width: 100%; }
-    @media print {
-      body { background: white; font-size: 12px; }
-      .header, .no-print, .disclaimer-footer { display: none !important; }
-      .card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
-      .day-card { page-break-before: always; }
-      .day-card:first-child { page-break-before: avoid; }
-    }
-    @media (max-width: 600px) {
-      .header-logo { height: 36px; }
-      .card { padding: 16px; }
-      .header-badges { font-size: 11px; gap: 4px; }
-      .btn { padding: 8px 16px; font-size: 13px; }
-    }
+    @media print { body { background: white; font-size: 12px; } .header, .no-print { display: none !important; } .card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; } .day-card { page-break-before: always; } .day-card:first-child { page-break-before: avoid; } }
+    @media (max-width: 600px) { .header-logo { height: 36px; } .card { padding: 16px; } .header-badges { font-size: 11px; gap: 4px; } .btn { padding: 8px 16px; font-size: 13px; } }
   </style>
 </head>
 <body>
@@ -110,13 +89,7 @@
     const SEASONAL_IMG = '/goodfork-seasonal-cover.png';
     const YEARLY_IMG = '/goodfork-yearly-cover.png';
 
-    let session = null;
-    let planPaid = false;
-    let mealPlanText = '';
-    let shoppingText = '';
-    let allergenText = '';
-    let generating = false;
-    let genAbortController = null;
+    let session = null, planPaid = false, mealPlanText = '', shoppingText = '', allergenText = '', generating = false, genAbortController = null;
 
     function genSessionId() { return 'sess_' + Math.random().toString(36).slice(2, 10); }
     function saveSession(s) { localStorage.setItem('gf_session', JSON.stringify(s)); }
@@ -124,8 +97,7 @@
     function clearSession() { localStorage.removeItem('gf_session'); }
 
     function getSeason(country) {
-      const s = ['South Africa','Nigeria','Kenya','Australia'];
-      const m = new Date().getMonth() + 1;
+      const s = ['South Africa','Nigeria','Kenya','Australia']; const m = new Date().getMonth() + 1;
       if (s.includes(country)) {
         if ([12,1,2].includes(m)) return '☀️ Summer'; if ([3,4,5].includes(m)) return '🍂 Autumn';
         if ([6,7,8].includes(m)) return '❄️ Winter'; return '🌱 Spring';
@@ -135,169 +107,83 @@
       }
     }
 
-       function parseDays(text) {
-      const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-      const result = [];
+    function parseDays(text) {
+      const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], result = [];
       for (let i = 0; i < days.length; i++) {
         const d = days[i], n = days[i+1];
-        // Match: "### Monday" on its own line (with or without asterisks)
-        const patterns = [
-          new RegExp(`###\\s*\\*?\\*?\\s*${d}\\s*\\*?\\*?\\s*$`, 'im'),
-          new RegExp(`===?\\s*${d}\\s*===?`, 'i'),
-          new RegExp(`📅\\s*${d}`, 'i')
-        ];
-        let startMatch = null;
-        for (const p of patterns) {
-          startMatch = text.match(p);
-          if (startMatch) break;
-        }
-        if (!startMatch) continue;
-        const start = startMatch.index + startMatch[0].length;
-        
-        let end = text.length;
-        if (n) {
-          for (const p of [
-            new RegExp(`###\\s*\\*?\\*?\\s*${n}\\s*\\*?\\*?\\s*$`, 'im'),
-            new RegExp(`===?\\s*${n}\\s*===?`, 'i'),
-            new RegExp(`📅\\s*${n}`, 'i')
-          ]) {
-            const em = text.match(p);
-            if (em) { end = em.index; break; }
-          }
-        }
-                let dayContent = text.slice(start, end).trim();
-        // Remove daily total line and shopping list markers from day content
-        dayContent = dayContent.replace(/\*\*Daily total:.*$/gim, '');
-        dayContent = dayContent.replace(/###\s*\*?\*?\s*Weekly Shopping List.*$/gim, '');
-        dayContent = dayContent.replace(/###\s*\*?\*?\s*Shopping List.*$/gim, '');
-        dayContent = dayContent.trim();
-        result.push({ day: d, content: dayContent });
+        const patterns = [new RegExp(`###\\s*\\*?\\*?\\s*${d}\\s*\\*?\\*?\\s*$`,'im'), new RegExp(`===?\\s*${d}\\s*===?`,'i'), new RegExp(`📅\\s*${d}`,'i')];
+        let sm = null; for (const p of patterns) { sm = text.match(p); if (sm) break; }
+        if (!sm) continue;
+        const st = sm.index + sm[0].length; let en = text.length;
+        if (n) { for (const p of [new RegExp(`###\\s*\\*?\\*?\\s*${n}\\s*\\*?\\*?\\s*$`,'im'), new RegExp(`===?\\s*${n}\\s*===?`,'i'), new RegExp(`📅\\s*${n}`,'i')]) { const em = text.match(p); if (em) { en = em.index; break; } } }
+        let dc = text.slice(st, en).trim();
+        dc = dc.replace(/\*\*Daily total:.*$/gim,'').replace(/###\s*\*?\*?\s*Weekly Shopping List.*$/gim,'').replace(/###\s*\*?\*?\s*Shopping List.*$/gim,'').trim();
+        result.push({ day: d, content: dc });
       }
       return result;
     }
 
-                  function parseMeals(content) {
-      const meals = [];
-      const lines = content.split('\n');
-      let cur = null;
-      
+    function parseMeals(content) {
+      const meals = [], lines = content.split('\n'); let cur = null;
       for (const line of lines) {
-        let t = line.trim();
-        if (!t) continue;
-        
-        // Detect meal heading with emoji: "🌅 **Breakfast:** ..."
+        let t = line.trim(); if (!t) continue;
         if (/^(🌅|🍌|🥗|🥕|🍽️)\s/i.test(t)) {
           if (cur && (cur.ingredients.length || cur.steps.length)) meals.push(cur);
-          
-          // Extract metadata from parentheses at the end
-          const metaMatch = t.match(/\(([^)]+)\)\s*$/);
-          const meta = metaMatch ? metaMatch[1] : '';
-          
-          // Clean the name
-          let name = t.replace(/^[🌅🍌🥗🥕🍽️]\s*\*\*/, '').trim();
-          name = name.replace(/\*\*$/,'').trim();
-          name = name.replace(/\s*\([^)]+\)\s*$/,'').trim();
-          name = name.replace(/\*\*/g,'');
-          
+          const mm = t.match(/\(([^)]+)\)\s*$/); const meta = mm ? mm[1] : '';
+          let name = t.replace(/^[🌅🍌🥗🥕🍽️]\s*\*\*/,'').trim().replace(/\*\*$/,'').trim().replace(/\s*\([^)]+\)\s*$/,'').trim().replace(/\*\*/g,'');
           cur = { name, meta, ingredients: [], steps: [], healthy: '', allergens: '' };
         } else if (cur) {
-          // Match **Ingredients:** ...
-          if (/\*\*Ingredients?:\*\*/i.test(t)) {
-            const rest = t.replace(/\*\*Ingredients?:\*\*\s*/i, '').trim();
-            if (rest) cur.ingredients.push(rest);
-          }
-          // Match **Steps:** ...
-          else if (/\*\*Steps?:\*\*/i.test(t)) {
-            // Steps header - next lines are steps
-          }
-          // Match **Healthy:** ... Allergens: ...
+          if (/\*\*Ingredients?:\*\*/i.test(t)) { const rest = t.replace(/\*\*Ingredients?:\*\*\s*/i,'').trim(); if (rest) cur.ingredients.push(rest); }
+          else if (/\*\*Steps?:\*\*/i.test(t)) {}
           else if (/\*\*Healthy:\*\*/i.test(t)) {
-            let htext = t.replace(/\*\*Healthy:\*\*\s*/i, '').trim();
-            // Check for allergens on same line
-            const allerMatch = htext.match(/Allergens?:\s*(.+)$/i);
-            if (allerMatch) {
-              cur.allergens = allerMatch[1].trim();
-              htext = htext.replace(/\s*Allergens?:\s*.+$/i, '').trim();
-            }
-            cur.healthy = htext;
-          }
-          // Match standalone **Allergens:** line
-          else if (/\*\*Allergens?:\*\*/i.test(t)) {
-            cur.allergens = t.replace(/\*\*Allergens?:\*\*\s*/i, '').trim();
-          }
-          // Numbered steps (1. ...)
-          else if (/^\d+\.\s/.test(t)) {
-            cur.steps.push(t);
-          }
-          // Other content lines (ingredients continuation)
-          else if (t.length > 3) {
-            cur.ingredients.push(t);
-          }
+            let ht = t.replace(/\*\*Healthy:\*\*\s*/i,'').trim(); const am = ht.match(/Allergens?:\s*(.+)$/i);
+            if (am) { cur.allergens = am[1].trim(); ht = ht.replace(/\s*Allergens?:\s*.+$/i,'').trim(); } cur.healthy = ht;
+          } else if (/\*\*Allergens?:\*\*/i.test(t)) { cur.allergens = t.replace(/\*\*Allergens?:\*\*\s*/i,'').trim(); }
+          else if (/^\d+\.\s/.test(t)) { cur.steps.push(t); }
+          else if (t.length > 3 && !t.startsWith('**') && !t.startsWith('###') && !t.startsWith('🛒')) { cur.ingredients.push(t); }
         }
       }
       if (cur && (cur.ingredients.length || cur.steps.length)) meals.push(cur);
       return meals;
     }
-                  function parseShoppingList(text) {
-      const lines = text.split('\n');
-      const items = [];
-      
+
+    function parseShoppingList(text) {
+      const lines = text.split('\n'), cats = []; let cur = null;
       for (const line of lines) {
-        let t = line.trim();
-        if (!t) continue;
-        t = t.replace(/^[#]{1,4}\s*/,'').replace(/^[•\-\*]\s*/,'').replace(/\*\*/g,'').trim();
+        let t = line.trim(); if (!t) continue;
+        t = t.replace(/^[#•\-\*]{1,4}\s*/,'').replace(/\*\*/g,'').trim();
         if (!t || t.startsWith('---') || t.startsWith('===') || t.startsWith('⚠️') || t.toLowerCase().startsWith('disclaimer')) continue;
-        
-        const catKeywords = ['produce', 'protein', 'dairy', 'grain', 'pantry', 'spice', 'condiment', 'bread', 'nuts', 'snack', 'beverage', 'other', 'miscellaneous'];
-        const looksLikeCat = catKeywords.some(k => t.toLowerCase().includes(k)) && 
-                             (t.endsWith(':') || t.endsWith('s') || /^[A-Z][a-z]+/.test(t));
-        
-        if (looksLikeCat && t.length < 40 && !t.startsWith('☐')) {
-          const em = {'fresh produce':'🥦','produce':'🥦','protein':'🍗','proteins':'🍗','dairy':'🥛','grains':'🍞','pantry':'🧂','spices':'🌿','condiments':'🧂','breads':'🍞','nuts':'🥜','snacks':'🍿','beverages':'🥤','other':'📦','miscellaneous':'📦'};
+        const kw = ['produce','protein','dairy','grain','pantry','spice','condiment','bread','nuts','snack','beverage','other','miscellaneous','canned','fruit','vegetable'];
+        const isCat = kw.some(k => t.toLowerCase().includes(k)) && (t.endsWith(':') || t.endsWith('s') || /^[A-Z][a-z]+/.test(t)) && t.length < 40;
+        if (isCat) {
+          const em = {'fresh produce':'🥦','produce':'🥦','fruit':'🥦','vegetable':'🥦','protein':'🍗','proteins':'🍗','dairy':'🥛','grains':'🍞','pantry':'🧂','spices':'🌿','condiments':'🧂','breads':'🍞','nuts':'🥜','snacks':'🍿','beverages':'🥤','canned':'🥫','other':'📦','miscellaneous':'📦'};
           const k = Object.keys(em).find(x => t.toLowerCase().includes(x));
-          const catName = t.replace(/:$/,'').trim();
-          const displayName = catName.charAt(0).toUpperCase() + catName.slice(1);
-          items.push({ type: 'category', text: displayName, emoji: k ? em[k] : '📦' });
-        } else if (t.length > 5) {
-          items.push({ type: 'item', text: t });
-        }
+          cur = { name: t.replace(/:$/,'').trim(), emoji: k ? em[k] : '📦', items: [] }; cats.push(cur);
+        } else if (cur && t.length > 2) { cur.items.push(t); }
+        else if (!cur && t.length > 2) { cur = { name: 'Shopping List', emoji: '📦', items: [t] }; cats.push(cur); }
       }
-      
-      if (!items.length) return '';
-      
-      let html = '';
-      for (const item of items) {
-        if (item.type === 'category') {
-          html += `<div class="shop-category">${item.emoji} ${item.text}</div>`;
-        } else {
-          html += `<div class="shop-item"><span class="shop-checkbox">☐</span> ${item.text}</div>`;
-        }
-      }
-      return html;
+      if (!cats.length) return '';
+      return cats.map(c => `<div class="shop-category">${c.emoji} ${c.name}</div>${c.items.map(i => `<div class="shop-item"><span class="shop-checkbox">☐</span> ${i}</div>`).join('')}`).join('');
     }
-    
-           function renderMealContent(content) {
+
+    function renderMealContent(content) {
       const meals = parseMeals(content);
       if (!meals.length) return '<p style="color:#888;font-size:14px;">No meal data available</p>';
       return meals.map(m => {
         const mp = m.meta ? m.meta.split('|').map(s=>s.trim()) : [];
-        let mb = '';
-        if (mp.length>=4) mb = `<div class="macro-badges"><span class="macro-badge macro-time">⏱️ ${mp[0]}</span><span class="macro-badge macro-diff">🧑‍🍳 ${mp[1]}</span><span class="macro-badge macro-cal">🔥 ${mp[2]}</span><span class="macro-badge macro-macros">${mp.slice(3).join(' | ')}</span></div>`;
+        let mb = ''; if (mp.length>=4) mb = `<div class="macro-badges"><span class="macro-badge macro-time">⏱️ ${mp[0]}</span><span class="macro-badge macro-diff">🧑‍🍳 ${mp[1]}</span><span class="macro-badge macro-cal">🔥 ${mp[2]}</span><span class="macro-badge macro-macros">${mp.slice(3).join(' | ')}</span></div>`;
         const ing = m.ingredients.length ? `<p style="font-weight:700;color:#2D6A4F;margin-top:8px;">📝 Ingredients</p><ul class="ingredient-list">${m.ingredients.map(i=>`<li>• ${i}</li>`).join('')}</ul>` : '';
-        const stp = m.steps.length ? `<p style="font-weight:700;color:#2D6A4F;margin-top:8px;">👨‍🍳 Steps</p><ol class="step-list">${m.steps.map((s,i)=>`<li>${s.replace(/^\d+\.\s|-\s/,'')}</li>`).join('')}</ol>` : '';
+        const stp = m.steps.length ? `<p style="font-weight:700;color:#2D6A4F;margin-top:8px;">👨‍🍳 Steps</p><ol class="step-list">${m.steps.map(s=>`<li>${s.replace(/^\d+\.\s|-\s/,'')}</li>`).join('')}</ol>` : '';
         const hl = m.healthy ? `<div class="healthy-note">💚 <strong>Why it's healthy:</strong> ${m.healthy}</div>` : '';
         const al = m.allergens ? `<div class="allergen-box ${m.allergens.toLowerCase().includes('none')?'allergen-safe':'allergen-warn'}">${m.allergens.toLowerCase().includes('none')?'✅ No common allergens':`⚠️ <strong>Allergens:</strong> ${m.allergens}`}</div>` : '';
-                const cleanName = m.name.replace(/^[�\s]+/, '').replace(/^[^\w\s\(]+/, '').trim();
-        return `<div class="meal-block"><div class="meal-name">${cleanName}</div>${mb}${ing}${stp}${hl}${al}</div>`;
+        const cn = m.name.replace(/^[�\s]+/,'').replace(/^[^\w\s\(]+/,'').trim();
+        return `<div class="meal-block"><div class="meal-name">${cn}</div>${mb}${ing}${stp}${hl}${al}</div>`;
       }).join('');
     }
 
-               function renderShoppingList(text) {
-      return parseShoppingList(text);
-    }
+    function renderShoppingList(text) { return parseShoppingList(text); }
 
     const app = document.getElementById('app');
-
     function render() { if (!session) renderLogin(); else renderMain(); }
 
     function renderLogin() {
@@ -313,37 +199,25 @@
       return `<div style="flex-shrink:0;width:200px;background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);position:relative;border-bottom:6px solid #2D6A4F;">${badge}<img src="${img}" alt="${title}" style="width:100%;height:120px;object-fit:cover;" onerror="this.style.display='none'"><div style="padding:16px;"><h3 style="font-size:15px;font-weight:800;color:#2D6A4F;">${title}</h3><p style="font-size:11px;color:#888;">${desc}</p><p style="font-size:22px;font-weight:800;color:#E76F51;margin:8px 0;">${price}<span style="font-size:12px;color:#888;">${period?'/'+period:''}</span></p><a href="${PAYHIP_STORE}" class="btn btn-primary" style="width:100%;text-align:center;font-size:12px;">${title}</a></div></div>`;
     }
 
-    function startDemo() {
-      session = { email:'demo@goodfork.app', remaining:99, max:99, seasonal:true, demo:true, sessionId:genSessionId() };
-      saveSession(session); planPaid = false; mealPlanText = ''; shoppingText = ''; allergenText = ''; render();
-    }
+    function startDemo() { session = { email:'demo@goodfork.app', remaining:99, max:99, seasonal:true, demo:true, sessionId:genSessionId() }; saveSession(session); planPaid=false; mealPlanText=''; shoppingText=''; allergenText=''; render(); }
 
     async function handleLogin(e) {
-      e.preventDefault();
-      const email = document.getElementById('loginEmail').value;
-      const password = document.getElementById('loginPassword').value;
-      const er = document.getElementById('loginError');
-      const btn = document.getElementById('loginBtn');
-      er.style.display = 'none'; btn.disabled = true; btn.textContent = 'Signing in...';
+      e.preventDefault(); const email = document.getElementById('loginEmail').value, password = document.getElementById('loginPassword').value;
+      const er = document.getElementById('loginError'), btn = document.getElementById('loginBtn');
+      er.style.display='none'; btn.disabled=true; btn.textContent='Signing in...';
       try {
         const c = new AbortController(); setTimeout(()=>c.abort(),25000);
         const r = await fetch(`${BACKEND}/api/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password}),signal:c.signal});
         const d = await r.json();
-        if (!r.ok||d.error) { er.textContent = d.error||'Invalid email or password'; er.style.display='block'; }
-        else {
-          session = { email, remaining:d.remaining??0, max:d.max??0, seasonal:d.seasonal??false, demo:false, sessionId:genSessionId() };
-          saveSession(session); planPaid=false; mealPlanText=''; shoppingText=''; allergenText=''; render();
-        }
-      } catch(err) {
-        er.textContent = err.name==='AbortError'?'Server taking too long. Try again.':'Cannot reach server. Check your connection.';
-        er.style.display='block';
-      } finally { btn.disabled=false; btn.textContent='🍴 Sign In & Start Cooking'; }
+        if (!r.ok||d.error) { er.textContent=d.error||'Invalid email or password'; er.style.display='block'; }
+        else { session = { email, remaining:d.remaining??0, max:d.max??0, seasonal:d.seasonal??false, demo:false, sessionId:genSessionId() }; saveSession(session); planPaid=false; mealPlanText=''; shoppingText=''; allergenText=''; render(); }
+      } catch(err) { er.textContent = err.name==='AbortError'?'Server taking too long. Try again.':'Cannot reach server. Check your connection.'; er.style.display='block'; }
+      finally { btn.disabled=false; btn.textContent='🍴 Sign In & Start Cooking'; }
     }
 
     function renderMain() {
       const seasonLabel = session.seasonal ? getSeason('South Africa') : null;
-      const canGenerate = session.remaining > 0 && !generating;
-      const isLocked = !planPaid && !session.demo;
+      const canGenerate = session.remaining > 0 && !generating, isLocked = !planPaid && !session.demo;
       app.innerHTML = `<div style="min-height:100vh;display:flex;flex-direction:column;"><header class="header"><div class="header-inner"><img src="${LOGO_URL}" alt="GoodFork" class="header-logo"><div class="header-badges">${session.demo?'<span class="badge badge-demo">🔒 Demo</span>':''}<span class="badge-plans">🔑 Plans: ${session.demo?'99':session.remaining} / ${session.max}</span>${seasonLabel?`<span class="badge-season">${seasonLabel}</span>`:''}<button class="btn btn-outline btn-sm" id="logoutBtn">Log Out</button></div></div></header><main style="flex:1;padding:24px 16px;"><div class="container">${session.demo?`<div style="background:#fffbcc;border:1px solid #f0e040;border-radius:12px;padding:12px 16px;margin-bottom:24px;font-size:13px;font-weight:700;color:#7a6000;text-align:center;">🔒 Demo Mode — <a href="${PAYHIP_STORE}" style="text-decoration:underline;font-weight:800;">purchase a plan</a> to unlock copy & print</div>`:''}${!mealPlanText&&!generating?`<div class="card card-left-border"><h2 style="font-size:20px;font-weight:800;color:#2D6A4F;margin-bottom:20px;">🌍 Generate Your Meal Plan</h2><div id="genForm"><div class="form-group"><label class="form-label">Country</label><select id="countrySelect" class="form-select"><option>South Africa</option><option>India</option><option>Nigeria</option><option>Kenya</option><option>United Kingdom</option><option>United States</option><option>Canada</option><option>Australia</option><option>Mexico</option><option>Japan</option><option>Other</option></select><input type="text" id="otherCountry" class="form-input mt-2 hidden" placeholder="Enter country name"></div><div class="form-group"><label class="form-label">Age Group</label><select id="ageSelect" class="form-select"><option>Infant (6-12 months)</option><option>Toddler (1-3 years)</option><option>Preschooler (4-6 years)</option><option>Child (7-12 years)</option><option>Teen (13-17 years)</option><option>Adult (18-59 years)</option><option>Senior (60+ years)</option></select></div><div class="form-group"><label class="form-label">Dietary Preferences</label><div class="diet-pills" id="dietPills"><button class="diet-pill" data-val="Vegetarian">🥕 Vegetarian</button><button class="diet-pill" data-val="Vegan">🌱 Vegan</button><button class="diet-pill" data-val="Halal">🕌 Halal</button><button class="diet-pill" data-val="Dairy-free">🥛 Dairy-free</button><button class="diet-pill" data-val="Gluten-free">🌾 Gluten-free</button><button class="diet-pill" data-val="Nut-free">🥜 Nut-free</button></div></div><div class="form-group"><label class="form-label">Allergies & Restrictions</label><input type="text" id="extraInput" class="form-input" placeholder="e.g., peanuts, shellfish, gluten"></div><div class="form-group"><label class="form-label">👥 Number of People</label><select id="peopleSelect" class="form-select"><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option></select></div><button id="genBtn" class="btn btn-primary w-full" style="width:100%;padding:14px;font-size:16px;" ${canGenerate?'':'disabled'}>🍴 Generate My Meal Plan</button></div></div>`:''}${generating?`<div class="card" style="text-align:center;padding:40px 20px;"><span class="pulse-emoji">🍽️</span><p id="genProgress" style="font-weight:700;color:#2D6A4F;margin-bottom:16px;">🍽️ Cooking up your healthy week...</p><div class="progress-bar"><div class="progress-fill"></div></div><p id="genLongWait" style="font-size:12px;color:#E76F51;margin-top:16px;display:none;">⏱️ This is taking longer than usual. Great meals take time!</p><button id="cancelGenBtn" class="btn btn-outline mt-4" style="color:#c0392b;border-color:#c0392b;">✕ Cancel</button></div>`:''}<div id="genError" style="display:none;background:#fde8e8;color:#c0392b;padding:12px 16px;border-radius:12px;margin-bottom:16px;font-weight:700;"></div>${mealPlanText&&!generating?`<div class="flex gap-3 flex-wrap mb-6 no-print"><button id="copyBtn" class="btn btn-primary">${isLocked?'🔒':'📋'} Copy Full Plan</button><button id="printBtn" class="btn btn-primary">${isLocked?'🔒':'🖨️'} Print / Save as PDF</button><span id="copiedMsg" style="display:none;color:#2D6A4F;font-weight:700;align-self:center;">✅ Copied!</span></div>${allergenText?`<div style="background:#fffbcc;border:1px solid #f0e040;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;font-weight:700;color:#7a6000;">⚠️ <strong>Allergens Detected:</strong> ${allergenText}</div>`:''}<div id="dayCards"></div>${shoppingText?`<div class="card card-green"><h2 style="font-size:22px;font-weight:800;color:#2D6A4F;margin-bottom:16px;">🛒 Shopping List</h2><div id="shopList"></div></div>`:''}`:''}</div></main><footer class="disclaimer">⚠️ Disclaimer: The meal plans generated by GoodFork are for informational purposes only and do not replace professional medical or dietary advice. Always consult a qualified healthcare provider, especially if you have allergies or medical conditions.</footer></div><div id="payModal" class="modal-overlay hidden"><div class="modal"><h3 style="font-size:18px;font-weight:800;color:#2D6A4F;margin-bottom:12px;">🔓 Unlock Copy & Print</h3><p style="font-size:14px;color:#555;margin-bottom:16px;">Purchase a single meal plan for <strong>$1.99</strong> to unlock copying and printing.</p><p id="payMsg" style="font-size:13px;color:#c0392b;font-weight:700;margin-bottom:16px;display:none;"></p><div class="flex gap-3"><button id="payNowBtn" class="btn btn-primary" style="flex:1;">💳 Pay Now</button><button id="cancelPayBtn" class="btn btn-outline" style="flex:1;border-color:#d4e8d4;">Cancel</button></div></div></div>`;
       if (!mealPlanText && !generating) wireGenForm();
       if (generating) {
@@ -360,7 +234,7 @@
           if(!days.length) return `<div class="card card-left-border"><pre style="white-space:pre-wrap;font-size:14px;">${mealPlanText}</pre></div>`;
           return days.map(({day,content})=>`<div class="card card-left-border day-card"><h3 class="day-heading">📅 ${day}</h3>${renderMealContent(content)}</div>`).join('');
         })();
-        if(shoppingText) document.getElementById('shopList').innerHTML = renderShoppingList(shoppingText);
+        if(shoppingText) { const sh = renderShoppingList(shoppingText); if(sh) document.getElementById('shopList').innerHTML = sh; }
       }
       document.getElementById('logoutBtn').addEventListener('click',()=>{clearSession();session=null;planPaid=false;mealPlanText='';shoppingText='';allergenText='';render();});
       document.getElementById('payNowBtn').addEventListener('click', startPayment);
@@ -375,10 +249,8 @@
     }
 
     async function handleGenerate(dietary) {
-      const country=document.getElementById('countrySelect').value;
-      const otherCountry=document.getElementById('otherCountry').value;
-      const ageGroup=document.getElementById('ageSelect').value;
-      const extraRestrictions=document.getElementById('extraInput').value;
+      const country=document.getElementById('countrySelect').value, otherCountry=document.getElementById('otherCountry').value;
+      const ageGroup=document.getElementById('ageSelect').value, extraRestrictions=document.getElementById('extraInput').value;
       const people=document.getElementById('peopleSelect').value;
       generating=true; genAbortController=new AbortController(); render();
       try {
@@ -388,19 +260,11 @@
         if(!r.ok||d.error){setGenError(d.error||'Something went wrong.');generating=false;render();}
         else {
           const fullText = d.mealPlan || '';
-          const shopMarkers = ['### **Weekly Shopping List**', '### Weekly Shopping List', '### **Shopping List**', '### Shopping List', '=== Shopping List', '## Shopping List', '🛒 Shopping List'];
+          const shopMarkers = ['### **Weekly Shopping List**', '### Weekly Shopping List', '### **Shopping List**', '### Shopping List', '🛒 Shopping List'];
           let shopIndex = -1;
-          for (const m of shopMarkers) {
-            shopIndex = fullText.indexOf(m);
-            if (shopIndex > -1) break;
-          }
-          if (shopIndex > -1) {
-            mealPlanText = fullText.substring(0, shopIndex).trim();
-            shoppingText = fullText.substring(shopIndex).trim();
-          } else {
-            mealPlanText = fullText;
-            shoppingText = '';
-          }
+          for (const m of shopMarkers) { shopIndex = fullText.indexOf(m); if (shopIndex > -1) break; }
+          if (shopIndex > -1) { mealPlanText = fullText.substring(0, shopIndex).trim(); shoppingText = fullText.substring(shopIndex).trim(); }
+          else { mealPlanText = fullText; shoppingText = ''; }
           allergenText = d.allergens || '';
           if(!session.demo&&d.remaining!==undefined){session.remaining=d.remaining;saveSession(session);}
           generating=false;render();
