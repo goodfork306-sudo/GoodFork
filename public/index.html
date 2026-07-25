@@ -270,18 +270,8 @@
       }).join('');
     }
 
-           function renderShoppingList(text) {
-      const cats = parseShoppingList(text);
-      if (!cats.length) {
-        return text.split('\n').filter(l => {
-          const t = l.trim().replace(/^[•\-\*]\s*/, '');
-          return t && !t.startsWith('---') && !t.startsWith('===') && !t.startsWith('⚠️');
-        }).map(l => `<div class="shop-item"><span class="shop-checkbox">☐</span> ${l.trim().replace(/^[•\-\*]\s*/,'').replace(/\*\*/g,'')}</div>`).join('');
-      }
-      return cats.map(c => 
-        `<div class="shop-category">${c.emoji} ${c.name}</div>
-        ${c.items.map(i => `<div class="shop-item"><span class="shop-checkbox">☐</span> ${i}</div>`).join('')}`
-      ).join('');
+               function renderShoppingList(text) {
+      return parseShoppingList(text);
     }
 
     const app = document.getElementById('app');
