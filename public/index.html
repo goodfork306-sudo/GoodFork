@@ -135,19 +135,34 @@
       }
     }
 
-    function parseDays(text) {
+       function parseDays(text) {
       const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-      const r = [];
-      for (let i=0; i<days.length; i++) {
+      const result = [];
+      for (let i = 0; i < days.length; i++) {
         const d = days[i], n = days[i+1];
-        const sr = new RegExp(`(?:###\\s*\\*\\*|###\\s*|===?\\s*)\\s*${d}\\s*(?:\\*\\*|===?)?`, 'i');
-        const er = n ? new RegExp(`(?:###\\s*\\*\\*|###\\s*|===?\\s*)\\s*${n}\\s*(?:\\*\\*|===?)?`, 'i') : null;
-        const sm = text.match(sr); if (!sm) continue;
-        const st = sm.index + sm[0].length;
-        const en = er ? (text.match(er)?.index ?? text.length) : text.length;
-        r.push({ day: d, content: text.slice(st, en).trim() });
+        const patterns = [
+          new RegExp(`###\\s*\\*?\\*?\\s*${d}\\s*\\*?\\*?`, 'i'),
+          new RegExp(`===?\\s*${d}\\s*===?`, 'i'),
+          new RegExp(`📅\\s*${d}`, 'i')
+        ];
+        let startMatch = null;
+        for (const p of patterns) {
+          startMatch = text.match(p);
+          if (startMatch) break;
+        }
+        if (!startMatch) continue;
+        const start = startMatch.index + startMatch[0].length;
+        
+        let end = text.length;
+        if (n) {
+          for (const p of [new RegExp(`###\\s*\\*?\\*?\\s*${n}\\s*\\*?\\*?`, 'i'), new RegExp(`===?\\s*${n}\\s*===?`, 'i'), new RegExp(`📅\\s*${n}`, 'i')]) {
+            const em = text.match(p);
+            if (em) { end = em.index; break; }
+          }
+        }
+        result.push({ day: d, content: text.slice(start, end).trim() });
       }
-      return r;
+      return result;
     }
 
               function parseMeals(content) {
