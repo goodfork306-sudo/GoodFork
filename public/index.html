@@ -140,8 +140,9 @@
       const result = [];
       for (let i = 0; i < days.length; i++) {
         const d = days[i], n = days[i+1];
+        // Match: "### Monday" on its own line (with or without asterisks)
         const patterns = [
-          new RegExp(`###\\s*\\*?\\*?\\s*${d}\\s*\\*?\\*?`, 'i'),
+          new RegExp(`###\\s*\\*?\\*?\\s*${d}\\s*\\*?\\*?\\s*$`, 'im'),
           new RegExp(`===?\\s*${d}\\s*===?`, 'i'),
           new RegExp(`📅\\s*${d}`, 'i')
         ];
@@ -155,7 +156,11 @@
         
         let end = text.length;
         if (n) {
-          for (const p of [new RegExp(`###\\s*\\*?\\*?\\s*${n}\\s*\\*?\\*?`, 'i'), new RegExp(`===?\\s*${n}\\s*===?`, 'i'), new RegExp(`📅\\s*${n}`, 'i')]) {
+          for (const p of [
+            new RegExp(`###\\s*\\*?\\*?\\s*${n}\\s*\\*?\\*?\\s*$`, 'im'),
+            new RegExp(`===?\\s*${n}\\s*===?`, 'i'),
+            new RegExp(`📅\\s*${n}`, 'i')
+          ]) {
             const em = text.match(p);
             if (em) { end = em.index; break; }
           }
