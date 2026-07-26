@@ -159,8 +159,9 @@
           const em = {'fresh produce':'🥦','produce':'🥦','fruit':'🥦','vegetable':'🥦','protein':'🍗','proteins':'🍗','dairy':'🥛','grains':'🍞','pantry':'🧂','spices':'🌿','condiments':'🧂','breads':'🍞','nuts':'🥜','snacks':'🍿','beverages':'🥤','canned':'🥫','other':'📦','miscellaneous':'📦'};
           const k = Object.keys(em).find(x => t.toLowerCase().includes(x));
           cur = { name: t.replace(/:$/,'').trim(), emoji: k ? em[k] : '📦', items: [] }; cats.push(cur);
-        } else if (cur && t.length > 2) { cur.items.push(t); }
-        else if (!cur && t.length > 2) { cur = { name: 'Shopping List', emoji: '📦', items: [t] }; cats.push(cur); }
+              } else if (cur && t.length > 2) { 
+          if (!t.toLowerCase().includes('shopping list')) cur.items.push(t); 
+        }
       }
       if (!cats.length) return '';
       return cats.map(c => `<div class="shop-category">${c.emoji} ${c.name}</div>${c.items.map(i => `<div class="shop-item"><span class="shop-checkbox">☐</span> ${i}</div>`).join('')}`).join('');
@@ -259,7 +260,10 @@
         const d=await r.json();
         if(!r.ok||d.error){setGenError(d.error||'Something went wrong.');generating=false;render();}
         else {
-          const fullText = d.mealPlan || '';
+          let fullText = d.mealPlan || '';
+          // Strip intro text before the first day marker
+          const firstDay = fullText.search(/###\s*Monday/i);
+          if (firstDay > 0) fullText = fullText.substring(firstDay);
           const shopMarkers = ['### **Weekly Shopping List**', '### Weekly Shopping List', '### **Shopping List**', '### Shopping List', '🛒 Shopping List'];
           let shopIndex = -1;
           for (const m of shopMarkers) { shopIndex = fullText.indexOf(m); if (shopIndex > -1) break; }
