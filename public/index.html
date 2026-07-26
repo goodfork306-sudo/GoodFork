@@ -334,12 +334,22 @@
           const jsonStart = fullText.indexOf('=== SHOPPING_LIST_START ===');
           const jsonEnd = fullText.indexOf('=== SHOPPING_LIST_END ===');
           if (jsonStart > -1 && jsonEnd > -1) {
-            const jsonStr = fullText.substring(jsonStart + 30, jsonEnd).trim();
+            let jsonStr = fullText.substring(jsonStart + 30, jsonEnd).trim();
+            // Clean up common AI JSON mistakes: remove bullet points, fix missing brackets
+            jsonStr = jsonStr.replace(/^[•\-\*]\s*/gm, '');
+            if (!jsonStr.trim().startsWith('{')) jsonStr = '{' + jsonStr;
+            if (!jsonStr.trim().endsWith('}')) jsonStr = jsonStr + '}';
+            // Fix missing commas between array items
+            jsonStr = jsonStr.replace(/"\s*\n\s*"/g, '",\n"');
+            // Fix missing commas between objects in array
+            jsonStr = jsonStr.replace(/}\s*\n\s*{/g, '},\n{');
             try {
               const jsonData = JSON.parse(jsonStr);
               shoppingText = JSON.stringify(jsonData);
               mealPlanText = fullText.substring(0, jsonStart).trim();
-            } catch(e) { /* keep raw text if JSON fails */ }
+            } catch(e) {
+              console.log('JSON parse failed, using raw text');
+            }
           }
           allergenText = d.allergens || '';
           if(!session.demo&&d.remaining!==undefined){session.remaining=d.remaining;saveSession(session);}
