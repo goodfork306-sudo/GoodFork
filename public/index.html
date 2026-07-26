@@ -331,25 +331,40 @@
           else { mealPlanText = fullText; shoppingText = ''; }
           
           // Extract JSON shopping list if present
-          const jsonStart = fullText.indexOf('=== SHOPPING_LIST_START ===');
-          const jsonEnd = fullText.indexOf('=== SHOPPING_LIST_END ===');
-          if (jsonStart > -1 && jsonEnd > -1) {
-            let jsonStr = fullText.substring(jsonStart + 30, jsonEnd).trim();
-            // Clean up common AI JSON mistakes: remove bullet points, fix missing brackets
-            jsonStr = jsonStr.replace(/^[•\-\*]\s*/gm, '');
-            if (!jsonStr.trim().startsWith('{')) jsonStr = '{' + jsonStr;
-            if (!jsonStr.trim().endsWith('}')) jsonStr = jsonStr + '}';
-            // Fix missing commas between array items
-            jsonStr = jsonStr.replace(/"\s*\n\s*"/g, '",\n"');
-            // Fix missing commas between objects in array
-            jsonStr = jsonStr.replace(/}\s*\n\s*{/g, '},\n{');
-            try {
-              const jsonData = JSON.parse(jsonStr);
-              shoppingText = JSON.stringify(jsonData);
-              mealPlanText = fullText.substring(0, jsonStart).trim();
-            } catch(e) {
-              console.log('JSON parse failed, using raw text');
-            }
+const jsonStart = fullText.indexOf('=== SHOPPING_LIST_START ===');
+const jsonEnd = fullText.indexOf('=== SHOPPING_LIST_END ===');
+if (jsonStart > -1 && jsonEnd > -1) {
+  let raw = fullText.substring(jsonStart + 30, jsonEnd).trim();
+  
+  // Strip any non-JSON text before the first '{' and after the last '}'
+  const firstBrace = raw.indexOf('{');
+  const lastBrace = raw.lastIndexOf('}');
+  if (firstBrace > -1 && lastBrace > -1 && lastBrace > firstBrace) {
+    raw = raw.substring(firstBrace, lastBrace + 1);
+  }
+  
+  // Clean up common AI JSON mistakes
+  raw = raw.replace(/^[•\-\*]\s*/gm, '');
+  if (!raw.trim().startsWith('{')) raw = '{' + raw;
+  if (!raw.trim().endsWith('}')) raw = raw + '}';
+  raw = raw.replace(/"\s*\n\s*"/g, '",\n"');
+  raw = raw.replace(/}\s*\n\s*{/g, '},\n{');
+  raw = raw.replace(/,\s*}/g, '}');   // trailing commas
+  raw = raw.replace(/,\s*\]/g, ']'); // trailing commas in arrays
+  
+  try {
+    const jsonData = JSON.parse(raw);
+    shoppingText = JSON.stringify(jsonData);
+    mealPlanText = fullText.substring(0, jsonStart).trim();
+  } catch(e) {
+    console.log('JSON parse failed, falling back to raw text');
+    // Remove markers from the raw fallback so they don't show
+    shoppingText = fullText
+      .replace(/=== SHOPPING_LIST_START ===/g, '')
+      .replace(/=== SHOPPING_LIST_END ===/g, '')
+      .trim();
+    mealPlanText = fullText.substring(0, jsonStart).trim();
+  }
           }
           allergenText = d.allergens || '';
           if(!session.demo&&d.remaining!==undefined){session.remaining=d.remaining;saveSession(session);}
