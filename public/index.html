@@ -154,11 +154,18 @@
         t = t.replace(/^[#•\-\*]{1,4}\s*/,'').replace(/\*\*/g,'').trim();
         if (!t || t.startsWith('---') || t.startsWith('===') || t.startsWith('⚠️') || t.toLowerCase().startsWith('disclaimer')) continue;
         const kw = ['produce','protein','dairy','grain','pantry','spice','condiment','bread','nuts','snack','beverage','other','miscellaneous','canned','fruit','vegetable'];
-        const isCat = kw.some(k => t.toLowerCase().includes(k)) && (t.endsWith(':') || t.endsWith('s') || /^[A-Z][a-z]+/.test(t)) && t.length < 40;
+        const isCat = kw.some(k => t.toLowerCase().includes(k)) && (t.endsWith(':') || (t.endsWith('s') && !t.includes('(')) || /^[A-Z][a-z]+$/.test(t)) && t.length < 30 && !/\d/.test(t);
         if (isCat) {
           const em = {'fresh produce':'🥦','produce':'🥦','fruit':'🥦','vegetable':'🥦','protein':'🍗','proteins':'🍗','dairy':'🥛','grains':'🍞','pantry':'🧂','spices':'🌿','condiments':'🧂','breads':'🍞','nuts':'🥜','snacks':'🍿','beverages':'🥤','canned':'🥫','other':'📦','miscellaneous':'📦'};
           const k = Object.keys(em).find(x => t.toLowerCase().includes(x));
-          cur = { name: t.replace(/:$/,'').trim(), emoji: k ? em[k] : '📦', items: [] }; cats.push(cur);
+          const catName = t.replace(/:$/,'').trim();
+          cur = { name: catName, emoji: k ? em[k] : '📦', items: [] }; cats.push(cur);
+          // Check for items after colon on same line
+          const afterColon = t.replace(/^[^:]+:\s*/,'').trim();
+          if (afterColon && afterColon !== t) {
+            afterColon.split(/,\s*/).forEach(item => { if (item.trim()) cur.items.push(item.trim()); });
+            cur = null;
+          }
               } else if (cur && t.length > 2) { 
           if (!t.toLowerCase().includes('shopping list')) cur.items.push(t); 
         }
