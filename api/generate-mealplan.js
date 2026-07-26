@@ -52,7 +52,7 @@ Healthy: One sentence. Allergens: X
 
 Use these emojis for meals: Breakfast 🌅, Morning Snack 🍌, Lunch 🥗, Afternoon Snack 🥕, Dinner 🍽️
 
-CRITICAL: Output all 7 days plus shopping list. Do not stop early.
+CRITICAL: Output all 7 days plus the JSON shopping list. Do not stop early.
 
 === Monday ===
 🌅 Breakfast: Name (X min | Easy | X kcal | P: Xg | C: Xg | F: Xg)
@@ -81,6 +81,69 @@ Steps: 1. Step 2. Step 3. Step 4. Step
 Healthy: Sentence. Allergens: X
 
 Daily total: ~X kcal
+
+(Repeat for all 7 days)
+
+After Sunday, output the shopping list in this EXACT JSON format between the markers:
+
+=== SHOPPING_LIST_START ===
+{
+  "categories": [
+    {
+      "name": "Fresh Produce",
+      "emoji": "🥦",
+      "items": ["quantity ingredient", "quantity ingredient"]
+    },
+    {
+      "name": "Proteins",
+      "emoji": "🍗",
+      "items": ["quantity ingredient"]
+    },
+    {
+      "name": "Dairy & Alternatives",
+      "emoji": "🥛",
+      "items": ["quantity ingredient"]
+    },
+    {
+      "name": "Grains & Breads",
+      "emoji": "🍞",
+      "items": ["quantity ingredient"]
+    },
+    {
+      "name": "Pantry & Condiments",
+      "emoji": "🧂",
+      "items": ["quantity ingredient"]
+    },
+    {
+      "name": "Spices",
+      "emoji": "🌿",
+      "items": ["quantity ingredient"]
+    },
+    {
+      "name": "Nuts & Seeds",
+      "emoji": "🥜",
+      "items": ["quantity ingredient"]
+    },
+    {
+      "name": "Other",
+      "emoji": "📦",
+      "items": ["quantity ingredient"]
+    }
+  ]
+}
+=== SHOPPING_LIST_END ===
+
+CATEGORY RULES:
+- Fresh Produce: fruits, vegetables, salad greens, fresh herbs, avocado
+- Proteins: meat, poultry, fish, seafood, eggs, biltong, tofu, tempeh
+- Dairy & Alternatives: milk, cheese, yogurt, cream, butter, plant-based dairy
+- Grains & Breads: rice, pasta, bread, wraps, tortillas, oats, cereal, flour, crackers, maize meal, pap
+- Pantry & Condiments: oils, sauces, canned goods, honey, jam, hummus, vinegar, chakalaka
+- Spices: all dried spices, seasonings, salt, pepper, curry powder
+- Nuts & Seeds: all nuts, seeds, peanut butter, almond butter
+- Other: anything that doesn't fit above
+
+Multiply all quantities by {people}. Include every ingredient used in the meal plan. Do not skip any item.
 
 ⚠️ Disclaimer: This meal plan is for informational purposes only and does not replace professional medical or dietary advice.`;
 
