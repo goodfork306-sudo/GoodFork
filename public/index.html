@@ -192,7 +192,7 @@
     
     const hasQuantity = /\d/.test(t) || /\(/.test(t) || /cup|tbsp|tsp|gram|kg|ml|liter|loaf|pack|bunch|piece/i.test(t);
     
-    if (isCategory && !hasQuantity && t.length < 35) {
+    if (isCategory && t.endsWith(':') && !hasQuantity && t.length < 35) {
       currentCategory = { emoji: catEmoji, name: catName, items: [] };
       items.push(currentCategory);
       
