@@ -84,54 +84,29 @@ Daily total: ~X kcal
 
 (Repeat for all 7 days)
 
-After Sunday, output the shopping list in this EXACT JSON format between the markers:
+After the 7-day meal plan, output a categorised shopping list.
+Start the shopping list with the line "=== SHOPPING_LIST_START ===" on its own.
+Then, for each category, write a line with an emoji and the category name followed by a colon (e.g., "🥦 Fresh Produce:").
+After that, list each item on its own line starting with "- ".
+End the shopping list with the line "=== SHOPPING_LIST_END ===" on its own.
 
+Example:
 === SHOPPING_LIST_START ===
-{
-  "categories": [
-    {
-      "name": "Fresh Produce",
-      "emoji": "🥦",
-      "items": ["quantity ingredient", "quantity ingredient"]
-    },
-    {
-      "name": "Proteins",
-      "emoji": "🍗",
-      "items": ["quantity ingredient"]
-    },
-    {
-      "name": "Dairy & Alternatives",
-      "emoji": "🥛",
-      "items": ["quantity ingredient"]
-    },
-    {
-      "name": "Grains & Breads",
-      "emoji": "🍞",
-      "items": ["quantity ingredient"]
-    },
-    {
-      "name": "Pantry & Condiments",
-      "emoji": "🧂",
-      "items": ["quantity ingredient"]
-    },
-    {
-      "name": "Spices",
-      "emoji": "🌿",
-      "items": ["quantity ingredient"]
-    },
-    {
-      "name": "Nuts & Seeds",
-      "emoji": "🥜",
-      "items": ["quantity ingredient"]
-    },
-    {
-      "name": "Other",
-      "emoji": "📦",
-      "items": ["quantity ingredient"]
-    }
-  ]
-}
+🥦 Fresh Produce:
+- 2 bananas
+- 1 apple
+- 1 bag spinach
+🍗 Proteins:
+- 200g chicken breast
+- 4 eggs
+🥛 Dairy & Alternatives:
+- 1 litre milk
+🍞 Grains & Breads:
+- 1 loaf wholemeal bread
 === SHOPPING_LIST_END ===
+
+DO NOT include any JSON, additional commentary, or meal plan text inside the markers.
+DO NOT repeat the meal plan after the shopping list.
 
 CATEGORY RULES:
 - Fresh Produce: fruits, vegetables, salad greens, fresh herbs, avocado
