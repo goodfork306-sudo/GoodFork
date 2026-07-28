@@ -44,6 +44,13 @@ Rules:
 - Adjust textures and portions for {ageGroup}
 - No ultra-processed foods
 
+CRITICAL DIVERSITY REQUIREMENTS:
+- Each day must feature entirely different cuisines, cooking methods, and ingredient profiles. Do not repeat the same meal twice across the whole week.
+- Vary breakfasts heavily: do not default to oats or eggs every morning. Use smoothies, parfaits, whole‑grain pancakes, savoury options, traditional porridges, etc.
+- Rotate lunch and dinner formats: salads, wraps, stir‑fries, stews, bakes, one‑pot meals, grilled dishes, etc.
+- Use a wide range of proteins (chicken, beef, lamb, fish, legumes, tofu) and grains (rice, quinoa, pasta, maize, bread).
+- Be inventive — imagine you are a professional chef creating a fresh menu every time. Surprise the user with unique flavour combinations.
+
 For each meal use this format:
 Name: [emoji] Short enticing phrase (X min | Difficulty | X kcal | P: Xg | C: Xg | F: Xg)
 Ingredients: quantity ingredient, quantity ingredient
@@ -52,7 +59,7 @@ Healthy: One sentence. Allergens: X
 
 Use these emojis for meals: Breakfast 🌅, Morning Snack 🍌, Lunch 🥗, Afternoon Snack 🥕, Dinner 🍽️
 
-CRITICAL: Output all 7 days plus the JSON shopping list. Do not stop early.
+CRITICAL: Output all 7 days plus the shopping list. Do not stop early.
 
 === Monday ===
 🌅 Breakfast: Name (X min | Easy | X kcal | P: Xg | C: Xg | F: Xg)
@@ -162,6 +169,7 @@ module.exports = async (req, res) => {
     : '';
 
   const randomWeek = Math.floor(Math.random() * 52) + 1;
+  const randomSeed = Math.floor(Math.random() * 1000);
   let seasonalInstructions = '';
   if (account.seasonal) {
     const season = getSeason(country, new Date().getMonth() + 1);
@@ -176,7 +184,7 @@ module.exports = async (req, res) => {
     .replace(/{people}/g, peopleCount)
     .replace(/{avoidMeals}/g, avoidMeals);
 
-  finalPrompt = `${finalPrompt}\nRandom week: ${randomWeek}. ${seasonalInstructions}`;
+  finalPrompt = `${finalPrompt}\nRandom week: ${randomWeek}. Random seed for creativity: ${randomSeed}. ${seasonalInstructions}`;
 
   try {
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -186,7 +194,7 @@ module.exports = async (req, res) => {
         { role: 'system', content: finalPrompt },
         { role: 'user', content: 'Generate the full 7-day meal plan now.' }
       ],
-      temperature: 0.7,
+      temperature: 0.8, // slightly higher for more variety
       max_tokens: 8000,
     });
 
