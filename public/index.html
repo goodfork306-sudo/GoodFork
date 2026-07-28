@@ -147,7 +147,7 @@
       return meals;
     }
 
-        function parseShoppingList(text) {
+    function parseShoppingList(text) {
       const lines = text.split('\n');
       const items = [];
       let currentCategory = null;
@@ -324,32 +324,29 @@
           // Strip intro text before the first day marker
           const firstDay = fullText.search(/###\s*Monday/i);
           if (firstDay > 0) fullText = fullText.substring(firstDay);
-          const shopMarkers = ['### **Weekly Shopping List**', '### Weekly Shopping List', '### **Shopping List**', '### Shopping List', '🛒 Shopping List'];
-          let shopIndex = -1;
-          for (const m of shopMarkers) { shopIndex = fullText.indexOf(m); if (shopIndex > -1) break; }
-                    if (shopIndex > -1) { mealPlanText = fullText.substring(0, shopIndex).trim(); shoppingText = fullText.substring(shopIndex).trim(); }
-          else { mealPlanText = fullText; shoppingText = ''; }
-          
-         // Extract shopping list as plain text using markers
-let shoppingText = '';
-if (fullText.includes('=== SHOPPING_LIST_START ===') && fullText.includes('=== SHOPPING_LIST_END ===')) {
-  const start = fullText.indexOf('=== SHOPPING_LIST_START ===') + 30;
-  const end = fullText.indexOf('=== SHOPPING_LIST_END ===');
-  shoppingText = fullText.substring(start, end).trim();
-  
-  // Clean up: remove any leading bullet characters and whitespace from every line
-  shoppingText = shoppingText.split('\n').map(line => {
-    return line.replace(/^[•\-\*]\s*/, '').trim();
-  }).join('\n');
-  
-  mealPlanText = fullText.substring(0, fullText.indexOf('=== SHOPPING_LIST_START ===')).trim();
-} else if (fullText.includes('🛒 Shopping List')) {
-  const parts = fullText.split('🛒 Shopping List');
-  mealPlanText = parts[0].trim();
-  shoppingText = parts[1].trim();
-} else {
-  mealPlanText = fullText;
-}
+
+          // Extract shopping list using flexible markers (AI may add bullets)
+          const shopStartRegex = /^\s*[•\-\*]?\s*=== SHOPPING_LIST_START ===/m;
+          const shopEndRegex = /^\s*[•\-\*]?\s*=== SHOPPING_LIST_END ===/m;
+          const startMatch = fullText.match(shopStartRegex);
+          const endMatch = fullText.match(shopEndRegex);
+          if (startMatch && endMatch && endMatch.index > startMatch.index) {
+            const start = startMatch.index + startMatch[0].length;
+            const end = endMatch.index;
+            shoppingText = fullText.substring(start, end).trim();
+            // Clean bullets and whitespace from the shopping text only (not the meal plan)
+            shoppingText = shoppingText.split('\n').map(line => {
+              return line.replace(/^[•\-\*]\s*/, '').trim();
+            }).join('\n');
+            mealPlanText = fullText.substring(0, startMatch.index).trim();
+          } else if (fullText.includes('🛒 Shopping List')) {
+            const parts = fullText.split('🛒 Shopping List');
+            mealPlanText = parts[0].trim();
+            shoppingText = parts[1].trim();
+          } else {
+            mealPlanText = fullText;
+          }
+
           allergenText = d.allergens || '';
           if(!session.demo&&d.remaining!==undefined){session.remaining=d.remaining;saveSession(session);}
           generating=false;render();
