@@ -330,12 +330,18 @@
                     if (shopIndex > -1) { mealPlanText = fullText.substring(0, shopIndex).trim(); shoppingText = fullText.substring(shopIndex).trim(); }
           else { mealPlanText = fullText; shoppingText = ''; }
           
-          // Extract shopping list as plain text using markers
+         // Extract shopping list as plain text using markers
 let shoppingText = '';
 if (fullText.includes('=== SHOPPING_LIST_START ===') && fullText.includes('=== SHOPPING_LIST_END ===')) {
   const start = fullText.indexOf('=== SHOPPING_LIST_START ===') + 30;
   const end = fullText.indexOf('=== SHOPPING_LIST_END ===');
   shoppingText = fullText.substring(start, end).trim();
+  
+  // Clean up: remove any leading bullet characters and whitespace from every line
+  shoppingText = shoppingText.split('\n').map(line => {
+    return line.replace(/^[•\-\*]\s*/, '').trim();
+  }).join('\n');
+  
   mealPlanText = fullText.substring(0, fullText.indexOf('=== SHOPPING_LIST_START ===')).trim();
 } else if (fullText.includes('🛒 Shopping List')) {
   const parts = fullText.split('🛒 Shopping List');
@@ -343,7 +349,7 @@ if (fullText.includes('=== SHOPPING_LIST_START ===') && fullText.includes('=== S
   shoppingText = parts[1].trim();
 } else {
   mealPlanText = fullText;
-          }
+}
           allergenText = d.allergens || '';
           if(!session.demo&&d.remaining!==undefined){session.remaining=d.remaining;saveSession(session);}
           generating=false;render();
