@@ -343,7 +343,6 @@ if (fullText.includes('=== SHOPPING_LIST_START ===') && fullText.includes('=== S
   shoppingText = parts[1].trim();
 } else {
   mealPlanText = fullText;
-}
           }
           allergenText = d.allergens || '';
           if(!session.demo&&d.remaining!==undefined){session.remaining=d.remaining;saveSession(session);}
