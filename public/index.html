@@ -148,84 +148,84 @@
     }
 
     function parseShoppingList(text) {
-      const lines = text.split('\n');
-      const items = [];
-      let currentCategory = null;
-      
-      const categoryKeywords = {
-        'produce': '🥦', 'fruit': '🥦', 'vegetable': '🥦', 'greens': '🥦',
-        'protein': '🍗', 'meat': '🍗', 'fish': '🍗', 'chicken': '🍗', 'beef': '🍗', 'lamb': '🍗', 'tofu': '🍗',
-        'dairy': '🥛', 'milk': '🥛', 'cheese': '🥛', 'yogurt': '🥛', 'yoghurt': '🥛',
-        'grain': '🍞', 'bread': '🍞', 'rice': '🍞', 'pasta': '🍞', 'cereal': '🍞', 'oats': '🍞', 'flour': '🍞',
-        'pantry': '🧂', 'condiment': '🧂', 'sauce': '🧂', 'oil': '🧂', 'canned': '🥫',
-        'spice': '🌿', 'herb': '🌿', 'seasoning': '🌿',
-        'nuts': '🥜', 'seed': '🥜',
-        'snack': '🍿', 'beverage': '🥤', 'drink': '🥤',
-        'other': '📦', 'miscellaneous': '📦'
-      };
-      
-      for (const line of lines) {
-        let t = line.trim();
-        if (!t) continue;
-        
-        // Clean the line
-        t = t.replace(/^[#•\-\*]{1,4}\s*/, '').replace(/\*\*/g, '').trim();
-        if (!t || t.startsWith('---') || t.startsWith('===') || t.startsWith('⚠️') || 
-            t.toLowerCase().startsWith('disclaimer') || t.toLowerCase().includes('shopping list')) continue;
-        
-        // Check if this line is a category heading
-        let isCategory = false;
-        let catEmoji = '📦';
-        let catName = t.replace(/:$/,'').trim();
-        
-        for (const [keyword, emoji] of Object.entries(categoryKeywords)) {
-          if (catName.toLowerCase().includes(keyword) && catName.length < 30) {
-            isCategory = true;
-            catEmoji = emoji;
-            break;
-          }
-        }
-        
-        // A line is a category if it matches keywords AND is short with no quantities
-        const hasQuantity = /\d/.test(t) || /\(/.test(t) || /cup|tbsp|tsp|gram|kg|ml|liter|loaf|pack|bunch|piece/i.test(t);
-        
-        if (isCategory && !hasQuantity && t.length < 35) {
-          currentCategory = { emoji: catEmoji, name: catName, items: [] };
-          items.push(currentCategory);
-          
-          // Check for items after colon on same line
-          const colonIdx = t.indexOf(':');
-          if (colonIdx > -1) {
-            const afterColon = t.substring(colonIdx + 1).trim();
-            if (afterColon && afterColon.length > 2) {
-              afterColon.split(/,\s*/).forEach(item => {
-                if (item.trim()) currentCategory.items.push(item.trim());
-              });
-            }
-          }
-        } else if (t.length > 2) {
-          // This is an item
-          if (currentCategory) {
-            currentCategory.items.push(t);
-          } else {
-            // No category yet, create a default one
-            currentCategory = { emoji: '📦', name: 'Other', items: [t] };
-            items.push(currentCategory);
-          }
-        }
+  const lines = text.split('\n');
+  const items = [];
+  let currentCategory = null;
+  
+  const categoryKeywords = {
+    'produce': '🥦', 'fruit': '🥦', 'vegetable': '🥦', 'greens': '🥦',
+    'protein': '🍗', 'meat': '🍗', 'fish': '🍗', 'chicken': '🍗', 'beef': '🍗', 'lamb': '🍗', 'tofu': '🍗',
+    'dairy': '🥛', 'milk': '🥛', 'cheese': '🥛', 'yogurt': '🥛', 'yoghurt': '🥛',
+    'grain': '🍞', 'bread': '🍞', 'rice': '🍞', 'pasta': '🍞', 'cereal': '🍞', 'oats': '🍞', 'flour': '🍞',
+    'pantry': '🧂', 'condiment': '🧂', 'sauce': '🧂', 'oil': '🧂', 'canned': '🥫',
+    'spice': '🌿', 'herb': '🌿', 'seasoning': '🌿',
+    'nuts': '🥜', 'seed': '🥜',
+    'snack': '🍿', 'beverage': '🥤', 'drink': '🥤',
+    'other': '📦', 'miscellaneous': '📦'
+  };
+  
+  for (const line of lines) {
+    let t = line.trim();
+    if (!t) continue;
+    
+    // Clean the line: remove bullets, bold markers, and any leading emoji characters
+    t = t.replace(/^[#•\-\*]{1,4}\s*/, '')
+         .replace(/\*\*/g, '')
+         .replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]\s*/u, '')
+         .trim();
+         
+    if (!t || t.startsWith('---') || t.startsWith('===') || t.startsWith('⚠️') || 
+        t.toLowerCase().startsWith('disclaimer') || t.toLowerCase().includes('shopping list')) continue;
+    
+    // Check if this line is a category heading
+    let isCategory = false;
+    let catEmoji = '📦';
+    let catName = t.replace(/:$/,'').trim();
+    
+    for (const [keyword, emoji] of Object.entries(categoryKeywords)) {
+      if (catName.toLowerCase().includes(keyword) && catName.length < 30) {
+        isCategory = true;
+        catEmoji = emoji;
+        break;
       }
-      
-      if (!items.length) return '';
-      
-      let html = '';
-      for (const cat of items) {
-        html += `<div class="shop-category">${cat.emoji} ${cat.name}</div>`;
-        for (const item of cat.items) {
-          html += `<div class="shop-item"><span class="shop-checkbox">☐</span> ${item}</div>`;
-        }
-      }
-      return html;
     }
+    
+    const hasQuantity = /\d/.test(t) || /\(/.test(t) || /cup|tbsp|tsp|gram|kg|ml|liter|loaf|pack|bunch|piece/i.test(t);
+    
+    if (isCategory && !hasQuantity && t.length < 35) {
+      currentCategory = { emoji: catEmoji, name: catName, items: [] };
+      items.push(currentCategory);
+      
+      const colonIdx = t.indexOf(':');
+      if (colonIdx > -1) {
+        const afterColon = t.substring(colonIdx + 1).trim();
+        if (afterColon && afterColon.length > 2) {
+          afterColon.split(/,\s*/).forEach(item => {
+            if (item.trim()) currentCategory.items.push(item.trim());
+          });
+        }
+      }
+    } else if (t.length > 2) {
+      if (currentCategory) {
+        currentCategory.items.push(t);
+      } else {
+        currentCategory = { emoji: '📦', name: 'Other', items: [t] };
+        items.push(currentCategory);
+      }
+    }
+  }
+  
+  if (!items.length) return '';
+  
+  let html = '';
+  for (const cat of items) {
+    html += `<div class="shop-category">${cat.emoji} ${cat.name}</div>`;
+    for (const item of cat.items) {
+      html += `<div class="shop-item"><span class="shop-checkbox">☐</span> ${item}</div>`;
+    }
+  }
+  return html;
+}
 
     function renderMealContent(content) {
       const meals = parseMeals(content);
